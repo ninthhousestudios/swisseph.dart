@@ -53,4 +53,33 @@ void main() {
       expect(result.hour, closeTo(18.5, 1e-6));
     });
   });
+
+  group('names', () {
+    test('planet name for Sun', () {
+      expect(swe.getPlanetName(seSun), equals('Sun'));
+    });
+
+    test('planet name for Moon', () {
+      expect(swe.getPlanetName(seMoon), equals('Moon'));
+    });
+
+    test('house name for Campanus', () {
+      final name = swe.houseName(hsysCampanus);
+      expect(name.toLowerCase(), contains('campanus'));
+    });
+  });
+
+  group('degnorm', () {
+    test('normalizes negative degrees', () {
+      expect(swe.degnorm(-10.0), closeTo(350.0, 0.001));
+    });
+
+    test('normalizes degrees > 360', () {
+      expect(swe.degnorm(370.0), closeTo(10.0, 0.001));
+    });
+
+    test('passes through valid degrees', () {
+      expect(swe.degnorm(180.0), closeTo(180.0, 0.001));
+    });
+  });
 }
