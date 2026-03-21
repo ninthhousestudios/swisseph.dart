@@ -120,4 +120,163 @@ class SwissEph {
       pkg_ffi.calloc.free(pHour);
     }
   }
+
+  // --- Configuration ---
+
+  /// Set the directory path for Swiss Ephemeris data files (.se1).
+  void setEphePath(String path) {
+    final pPath = path.toNativeUtf8(allocator: pkg_ffi.calloc).cast<ffi.Char>();
+    try {
+      _bind.swe_set_ephe_path(pPath);
+    } finally {
+      pkg_ffi.calloc.free(pPath);
+    }
+  }
+
+  /// Set the sidereal mode (ayanamsa).
+  void setSidMode(int sidMode, {double t0 = 0, double ayanT0 = 0}) {
+    _bind.swe_set_sid_mode(sidMode, t0, ayanT0);
+  }
+
+  /// Set the geographic position for topocentric calculations.
+  void setTopo(double geolon, double geolat, double geoalt) {
+    _bind.swe_set_topo(geolon, geolat, geoalt);
+  }
+
+  // --- Calculations ---
+
+  /// Calculate the position of a celestial body at a given Julian Day (UT).
+  CalcResult calcUt(double jdUt, int body, int flags) {
+    final xx = pkg_ffi.calloc<ffi.Double>(6);
+    final serr = pkg_ffi.calloc<ffi.Char>(256);
+    try {
+      final ret = _bind.swe_calc_ut(jdUt, body, flags, xx, serr);
+      if (ret < 0) {
+        final msg = serr.cast<pkg_ffi.Utf8>().toDartString();
+        throw SweException(msg, ret);
+      }
+      return CalcResult(
+        longitude: xx[0],
+        latitude: xx[1],
+        distance: xx[2],
+        longitudeSpeed: xx[3],
+        latitudeSpeed: xx[4],
+        distanceSpeed: xx[5],
+        returnFlag: ret,
+      );
+    } finally {
+      pkg_ffi.calloc.free(xx);
+      pkg_ffi.calloc.free(serr);
+    }
+  }
+
+  /// Calculate house cusps for a given time and location.
+  HouseResult houses(double jdUt, double geolat, double geolon, int hsys) {
+    final pCusps = pkg_ffi.calloc<ffi.Double>(37);
+    final pAscmc = pkg_ffi.calloc<ffi.Double>(10);
+    try {
+      final ret = _bind.swe_houses(jdUt, geolat, geolon, hsys, pCusps, pAscmc);
+      final cusps = List<double>.generate(13, (i) => pCusps[i]);
+      final ascmc = List<double>.generate(10, (i) => pAscmc[i]);
+      return HouseResult(cusps: cusps, ascmc: ascmc, returnFlag: ret);
+    } finally {
+      pkg_ffi.calloc.free(pCusps);
+      pkg_ffi.calloc.free(pAscmc);
+    }
+  }
+
+  // --- Ayanamsa ---
+
+  /// Get the ayanamsa value for a given Julian Day (UT).
+  double getAyanamsaUt(double jdUt) {
+    return _bind.swe_get_ayanamsa_ut(jdUt);
+  }
+
+  /// Get the ayanamsa value with extended flags.
+  AyanamsaResult getAyanamsaExUt(double jdUt, int flags) {
+    final pAya = pkg_ffi.calloc<ffi.Double>();
+    final serr = pkg_ffi.calloc<ffi.Char>(256);
+    try {
+      final ret = _bind.swe_get_ayanamsa_ex_ut(jdUt, flags, pAya, serr);
+      if (ret < 0) {
+        final msg = serr.cast<pkg_ffi.Utf8>().toDartString();
+        throw SweException(msg, ret);
+      }
+      return AyanamsaResult(ayanamsa: pAya.value, returnFlag: ret);
+    } finally {
+      pkg_ffi.calloc.free(pAya);
+      pkg_ffi.calloc.free(serr);
+    }
+  }
+
+  /// Get the name of an ayanamsa mode.
+  String getAyanamsaName(int sidMode) {
+    final ptr = _bind.swe_get_ayanamsa_name(sidMode);
+    return ptr.cast<pkg_ffi.Utf8>().toDartString();
+  }
+
+  // --- Names ---
+
+  /// Get the name of a celestial body.
+  String getPlanetName(int body) {
+    final buf = pkg_ffi.calloc<ffi.Char>(256);
+    try {
+      _bind.swe_get_planet_name(body, buf);
+      return buf.cast<pkg_ffi.Utf8>().toDartString();
+    } finally {
+      pkg_ffi.calloc.free(buf);
+    }
+  }
+
+  /// Get the name of a house system.
+  String houseName(int hsys) {
+    final ptr = _bind.swe_house_name(hsys);
+    return ptr.cast<pkg_ffi.Utf8>().toDartString();
+  }
+
+  // --- Utilities ---
+
+  /// Normalize a degree value to 0–360 range.
+  double degnorm(double x) {
+    return _bind.swe_degnorm(x);
+  }
+
+  // --- Rise/Set ---
+
+  /// Find the next rise, set, or transit of a celestial body.
+  RiseTransResult riseTrans(
+    double jdUt,
+    int body, {
+    int epheflag = seflgMoseph,
+    int rsmi = seCalcRise,
+    required double geolon,
+    required double geolat,
+    double geoalt = 0,
+    double atpress = 1013.25,
+    double attemp = 15.0,
+  }) {
+    final geopos = pkg_ffi.calloc<ffi.Double>(3);
+    final tret = pkg_ffi.calloc<ffi.Double>(10);
+    final serr = pkg_ffi.calloc<ffi.Char>(256);
+    final starname = pkg_ffi.calloc<ffi.Char>(256); // empty for planets
+    try {
+      geopos[0] = geolon;
+      geopos[1] = geolat;
+      geopos[2] = geoalt;
+
+      final ret = _bind.swe_rise_trans(
+          jdUt, body, starname, epheflag, rsmi, geopos, atpress, attemp,
+          tret, serr);
+      if (ret < 0) {
+        final msg = serr.cast<pkg_ffi.Utf8>().toDartString();
+        throw SweException(msg, ret);
+      }
+      return RiseTransResult(transitTime: tret[0], returnFlag: ret);
+    } finally {
+      pkg_ffi.calloc.free(geopos);
+      pkg_ffi.calloc.free(tret);
+      pkg_ffi.calloc.free(serr);
+      pkg_ffi.calloc.free(starname);
+    }
+  }
 }
