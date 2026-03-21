@@ -4,13 +4,14 @@ Dart FFI bindings to the Swiss Ephemeris C library. Requires Dart 3.11+.
 
 ## Build
 
-The C source is compiled automatically by a native asset build hook (`hook/build.dart`). It expects the [Swiss Ephemeris C source](https://github.com/aloistr/swisseph) at `../swisseph/` (sibling directory) or via `SWISSEPH_SRC` env var. `dart pub get` triggers the build.
+The [Swiss Ephemeris C source](https://github.com/aloistr/swisseph) is vendored in `csrc/`. The native asset build hook (`hook/build.dart`) compiles it automatically — `dart pub get` triggers the build. Override with `SWISSEPH_SRC` env var or a sibling `../swisseph/` directory for local dev with newer C source.
 
 The build hook packages (`hooks`, `code_assets`, `native_toolchain_c`) are in `dependencies`, not `dev_dependencies` — build hooks run at build time, not test time.
 
 ## Structure
 
 ```
+csrc/                      # vendored Swiss Ephemeris C source (Astrodienst AG)
 lib/swisseph.dart          # barrel export
 lib/src/swiss_eph.dart     # SwissEph class — all public API
 lib/src/bindings.dart      # SweBindings — raw dart:ffi lookups (package-private)

@@ -42,19 +42,24 @@ void main(List<String> args) async {
 }
 
 /// Find the Swiss Ephemeris C source directory.
-/// Priority: SWISSEPH_SRC env var > sibling directory next to package root.
+/// Priority: SWISSEPH_SRC env var > vendored csrc/ > sibling directory.
 String _findSourceDir(Uri packageRoot) {
   final envSrc = Platform.environment['SWISSEPH_SRC'];
   if (envSrc != null && Directory(envSrc).existsSync()) {
     return envSrc;
   }
 
-  // packageRoot is the swisseph.dart/ directory.
-  // The sibling swisseph/ directory is one level up.
+  // Vendored C source inside the package.
   final packageDir = Directory.fromUri(packageRoot);
+  final vendored = Directory('${packageDir.path}/csrc');
+  if (vendored.existsSync() &&
+      File('${vendored.path}/swephexp.h').existsSync()) {
+    return vendored.path;
+  }
+
+  // Sibling swisseph/ directory (useful for local dev with newer C source).
   final parentDir = packageDir.parent;
   final sibling = Directory('${parentDir.path}/swisseph');
-
   if (sibling.existsSync() &&
       File('${sibling.path}/swephexp.h').existsSync()) {
     return sibling.path;

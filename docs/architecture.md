@@ -39,9 +39,11 @@
 `hook/build.dart` is a Dart 3.11+ native asset build hook. When `dart pub get` runs, the Dart toolchain detects the `hook.build.enabled: true` entry in `pubspec.yaml` and executes the hook.
 
 The hook uses `package:native_toolchain_c` to:
-1. Locate the C source (env var `SWISSEPH_SRC` or sibling `../swisseph/` directory — clone from [github.com/aloistr/swisseph](https://github.com/aloistr/swisseph))
+1. Locate the C source — checks in order: `SWISSEPH_SRC` env var, vendored `csrc/` inside the package, sibling `../swisseph/` directory
 2. Compile 9 C files with `CBuilder.library` at `-O2`
 3. Output `libswisseph.so` (or `.dylib`/`.dll`) into `.dart_tool/`
+
+The C source is vendored in `csrc/` so consumers don't need to clone it separately. Override with `SWISSEPH_SRC` or a sibling `../swisseph/` directory for local dev with newer C source.
 
 **C source files compiled:**
 - `sweph.c` — main calculation engine

@@ -7,7 +7,6 @@ Instance-based, isolate-safe, no code generation. Uses Dart 3.11+ native asset b
 ## Requirements
 
 - Dart SDK 3.11+
-- [Swiss Ephemeris C source](https://github.com/aloistr/swisseph) (clone as `swisseph/` next to `swisseph.dart/`, or set `SWISSEPH_SRC`)
 - C compiler (gcc/clang)
 
 ## Install
@@ -92,4 +91,4 @@ Includes 26 unit tests plus a 545-value cross-validation suite against
 
 ## License
 
-The Swiss Ephemeris library is dual-licensed (GPL/commercial). See [astro.com/swisseph](https://www.astro.com/swisseph/) for details.
+The Swiss Ephemeris C library (vendored in `csrc/`) is copyright Astrodienst AG and dual-licensed (AGPL/commercial). See [astro.com/swisseph](https://www.astro.com/swisseph/) for details.
