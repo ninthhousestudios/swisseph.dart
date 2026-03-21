@@ -9,12 +9,12 @@ environment:
 dependencies:
   ffi: ^2.2.0
   logging: any
-
-dev_dependencies:
-  test: ^1.25.6
   hooks: any
   code_assets: any
   native_toolchain_c: any
+
+dev_dependencies:
+  test: ^1.25.6
 
 hook:
   build:
