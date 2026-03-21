@@ -1,0 +1,21 @@
+name: swisseph
+description: Isolate-safe Dart FFI bindings to the Swiss Ephemeris C library.
+version: 0.1.0
+repository: https://gitlab.com/ninthhouse/swisseph.dart
+
+environment:
+  sdk: ^3.11.0
+
+dependencies:
+  ffi: ^2.2.0
+  logging: any
+
+dev_dependencies:
+  test: ^1.25.6
+  hooks: any
+  code_assets: any
+  native_toolchain_c: any
+
+hook:
+  build:
+    enabled: true
