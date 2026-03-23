@@ -34,6 +34,7 @@ void main(List<String> args) async {
       sources: sources,
       language: Language.c,
       optimizationLevel: OptimizationLevel.o2,
+      libraries: ['m'],
     );
 
     await cBuilder.run(input: input, output: output, logger: logger);

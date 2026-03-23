@@ -235,6 +235,47 @@ A Python script (`generate_reference.py`) calls pyswisseph to compute reference 
 
 Most values match to 1e-8 (same C library, different FFI marshalling). Star-based ayanamsas (True Citra, etc.) and rise/set times use 1e-4 tolerance due to ephemeris engine differences.
 
+## Android / NDK linking
+
+### The problem
+
+On desktop Linux, glibc implicitly links `libm` — math functions like `sin`, `cos`, `atan2`, `pow`, etc. are available without explicitly passing `-lm`. Android's Bionic libc does **not** do this. Without an explicit `-lm`, all math symbols are unresolved at runtime, causing `dlopen` to fail with "cannot locate symbol".
+
+A second, subtler issue: clang at `-O2` recognizes adjacent `sin(x); cos(x)` call pairs and merges them into a single `sincos(x, &s, &c)` call. This is a valid optimization on glibc (which exports `sincos`), but on Bionic `sincos` is only available as a versioned symbol (`sincos@LIBC`) through `libm`. Without linking `libm`, the unversioned `sincos` reference fails to resolve.
+
+### Failed approaches
+
+1. **`-fno-builtin-sincos` compiler flag** — did not prevent clang from emitting `sincos` calls in practice.
+
+2. **`compat.c` shim** providing `sincos()` via `sin()` + `cos()` — the compiler optimized the `sin()`/`cos()` calls inside the shim back into `sincos()`, creating infinite recursion. Stack overflow on Android: 512 frames, all `sincos` calling itself.
+
+### The fix
+
+Link `libm` explicitly via the `libraries` parameter in `CBuilder`:
+
+```dart
+final cBuilder = CBuilder.library(
+  name: 'swisseph',
+  // ...
+  libraries: ['m'],
+);
+```
+
+This produces `-lm` in the linker invocation. All math symbols (including `sincos`) get versioned (`@LIBC`) and resolve correctly from Bionic's `libm.so` at runtime. No shim files needed.
+
+### Flutter-specific notes
+
+`SwissEph.find()` searches `.dart_tool/` for the compiled library, which works on desktop but not on Android (no filesystem access to build artifacts at runtime). On Android, the native assets system bundles `libswisseph.so` into the APK's `lib/<abi>/` directory. Load it by name:
+
+```dart
+if (Platform.isAndroid) {
+  return SwissEph('libswisseph.so');  // system linker finds it in the APK
+}
+return SwissEph.find();  // desktop: search .dart_tool/
+```
+
+Ephemeris `.se1` data files must be bundled as Flutter assets and extracted to the app's support directory at runtime, since Swiss Ephemeris reads them via filesystem paths (not asset bundles).
+
 ## Adding new Swiss Ephemeris functions
 
 1. **Binding**: Add a `late final` field in `SweBindings` (`lib/src/bindings.dart`) with the function's native and Dart type signatures
