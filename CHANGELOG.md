@@ -1,3 +1,11 @@
+## 0.1.1
+
+- Bundle Swiss Ephemeris data files in `ephe/` — sub-arcsecond precision
+  out of the box with no extra downloads.
+- Included: planets, Moon, main asteroids (Ceres, Pallas, Juno, Vesta,
+  Chiron, Pholus), fixed stars, and Hygiea.
+- Coverage: ~5400 BC – 5400 AD (~10,800 years).
+
 ## 0.1.0
 
 - Initial release.
