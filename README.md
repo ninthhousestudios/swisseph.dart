@@ -147,12 +147,24 @@ cover 0 AD – 5400 AD; the `m06` through `m54` files cover
 5400 BC – 0 AD. Together they span roughly **10,800 years** — more than
 enough for any practical astrological or historical use.
 
-To use the bundled files, point `setEphePath` to the `ephe/` directory:
+To use the bundled files, point `setEphePath` to the `ephe/` directory
+inside the installed package. Use `Isolate.resolvePackageUri` to find it
+at runtime:
 
 ```dart
-swe.setEphePath('ephe');
+import 'dart:isolate';
+
+final pkgUri = Uri.parse('package:swisseph/swisseph.dart');
+final resolved = await Isolate.resolvePackageUri(pkgUri);
+final ephePath = resolved!.resolve('../ephe').toFilePath();
+
+swe.setEphePath(ephePath);
 final sun = swe.calcUt(jd, seSun, seflgSwieph | seflgSpeed);
 ```
+
+This resolves to the `ephe/` directory in the pub cache (e.g.
+`~/.pub-cache/hosted/pub.dev/swisseph-0.1.1/ephe/`) regardless of
+where your project lives.
 
 ### What's not included
 
