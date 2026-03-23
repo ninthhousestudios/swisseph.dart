@@ -1,3 +1,13 @@
+## 0.1.2
+
+- Fix Android/NDK linking: link `libm` explicitly via `libraries: ['m']`
+  in the build hook. Desktop glibc links libm implicitly; Android's Bionic
+  does not, causing `dlopen` failures for math symbols (`sin`, `cos`,
+  `sincos`, etc.).
+- Document ephemeris file discovery for package consumers: use
+  `Isolate.resolvePackageUri` to locate the bundled `ephe/` directory
+  at runtime.
+
 ## 0.1.1
 
 - Bundle Swiss Ephemeris data files in `ephe/` — sub-arcsecond precision
