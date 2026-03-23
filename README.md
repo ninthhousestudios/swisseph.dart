@@ -126,25 +126,46 @@ All native memory uses `calloc` + `try/finally free`. Errors throw
 | Swiss Ephemeris | `seflgSwieph`  | `.se1` data files   | Sub-arcsecond  |
 | JPL             | `seflgJpleph`  | JPL ephemeris files | Highest        |
 
-Moshier is a good default — it works out of the box with no data files.
+Moshier works out of the box with no data files but is limited to
+~1 arcsecond accuracy.
 
-For higher precision, download `.se1` files from
-[astro.com/ftp/swisseph/ephe](https://www.astro.com/ftp/swisseph/ephe/)
-into an `ephe/` directory alongside your project, then point to them:
+### Bundled ephemeris files
+
+This package includes Swiss Ephemeris data files in `ephe/` for
+sub-arcsecond precision with no extra downloads:
+
+| Files | Contents | Coverage |
+|-------|----------|----------|
+| `sepl_*.se1` / `seplm*.se1` | Main planets (Sun–Pluto, lunar nodes) | 5400 BC – 5400 AD |
+| `semo_*.se1` / `semom*.se1` | Moon (high precision) | 5400 BC – 5400 AD |
+| `seas_*.se1` / `seasm*.se1` | Main asteroids (Ceres, Pallas, Juno, Vesta, Chiron, Pholus) | 5400 BC – 5400 AD |
+| `sefstars.txt` | ~1000 named fixed stars | Current epoch |
+| `ast0/se00010s.se1` | Asteroid 10 (Hygiea) | Short range |
+
+Each `.se1` file covers a 600-year range. The `_00` through `_48` files
+cover 0 AD – 5400 AD; the `m06` through `m54` files cover
+5400 BC – 0 AD. Together they span roughly **10,800 years** — more than
+enough for any practical astrological or historical use.
+
+To use the bundled files, point `setEphePath` to the `ephe/` directory:
 
 ```dart
 swe.setEphePath('ephe');
 final sun = swe.calcUt(jd, seSun, seflgSwieph | seflgSpeed);
 ```
 
-The ephemeris data files are not included in this package — you download
-them separately as needed. The three file sets are:
+### What's not included
 
-- `sepl_*.se1` — main planets
-- `semo_*.se1` — Moon
-- `seas_*.se1` — asteroids (Chiron, Ceres, etc.)
+- **JPL ephemeris files** — for highest-precision research use
+- **Additional numbered asteroids** — only Hygiea (10) is bundled;
+  thousands more are available separately
+- **Dates beyond ~5400 BC / 5400 AD** — the library falls back to
+  Moshier for dates outside the file range
 
-Each file covers 600 years. Download the ranges you need.
+The full set of ephemeris files (including additional asteroids and
+extended date ranges) is available from
+[astro.com/ftp/swisseph/ephe](https://www.astro.com/ftp/swisseph/ephe/).
+Download any additional files you need into the same `ephe/` directory.
 
 ## Constants
 
@@ -185,10 +206,11 @@ calculations across 100 isolates to prove this holds at scale.
 - **No Flutter plugin** — this is a pure Dart package using native asset
   build hooks. Works with Dart CLI and can be used from Flutter, but is
   not a Flutter plugin.
-- **No asteroid files** — only the bodies built into the Swiss Ephemeris
-  core (Sun through Chiron, nodes, apogees) are exposed. Numbered
-  asteroids via `seAstOffset` require additional `.se1` files and are
-  untested.
+- **Limited asteroid coverage** — main asteroids (Ceres, Pallas, Juno,
+  Vesta, Chiron, Pholus, Hygiea) are bundled. Thousands more numbered
+  asteroids are available from
+  [astro.com](https://www.astro.com/ftp/swisseph/ephe/) but are
+  untested with this package.
 - **C global state** — the underlying C library uses global state. See
   [Isolate safety](#isolate-safety) above.
 
