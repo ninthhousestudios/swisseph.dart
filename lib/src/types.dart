@@ -81,6 +81,9 @@ class DateResult {
 }
 
 /// Return type for swe_rise_trans.
+///
+/// A [returnFlag] of -2 indicates a circumpolar body that never rises or sets
+/// at the given location; [transitTime] will be 0.0 in that case.
 class RiseTransResult {
   final double transitTime;
   final int returnFlag;
@@ -194,6 +197,9 @@ class FixstarResult {
   final double latitudeSpeed;
   final double distanceSpeed;
 
+  /// The return flag from swe_fixstar2 (indicates which flags were actually computed).
+  final int returnFlag;
+
   const FixstarResult({
     required this.starName,
     required this.longitude,
@@ -202,6 +208,7 @@ class FixstarResult {
     required this.longitudeSpeed,
     required this.latitudeSpeed,
     required this.distanceSpeed,
+    required this.returnFlag,
   });
 
   @override
@@ -496,7 +503,8 @@ class SplitDegResult {
   final int minutes;
   final int seconds;
   final double secondsFraction;
-  final int sign;  // 1=positive, -1=negative
+  /// 1=positive, -1=negative. With SE_SPLIT_DEG_ZODIACAL: zodiac sign index (0–11).
+  final int sign;
   const SplitDegResult({required this.degrees, required this.minutes,
     required this.seconds, required this.secondsFraction, required this.sign});
 }

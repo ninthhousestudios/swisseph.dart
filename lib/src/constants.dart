@@ -134,6 +134,9 @@ const int hsysKrusinski = 0x55; // 'U'
 /// Vehlow equal
 const int hsysVehlow = 0x56; // 'V'
 
+/// Gauquelin sectors (36 sectors)
+const int hsysGauquelin = 0x47; // 'G'
+
 // --- Ayanamsa modes ---
 
 const int seSidmFaganBradley = 0;
@@ -290,14 +293,17 @@ const int seFlgJplHorApprox = 524288;
 const int seFlgCenterBody = 1048576;
 
 // --- Azimuth/altitude conversion flags ---
+// Note: The direction (e.g. ecl→hor vs hor→ecl) is determined by which
+// function you call (azAlt vs azAltRev), not by the flag value.
+// These flags select the coordinate system (ecliptic=0, equatorial=1).
 
-/// Ecliptic to horizon
+/// Ecliptic coordinates (for azAlt: ecliptic→horizon; for azAltRev: horizon→ecliptic)
 const int seEcl2hor = 0;
-/// Equatorial to horizon
+/// Equatorial coordinates (for azAlt: equatorial→horizon; for azAltRev: horizon→equatorial)
 const int seEqu2hor = 1;
-/// Horizon to ecliptic
+/// Alias for seEcl2hor (same value; direction is determined by the function called)
 const int seHor2ecl = 0;
-/// Horizon to equatorial
+/// Alias for seEqu2hor (same value; direction is determined by the function called)
 const int seHor2equ = 1;
 
 // --- Refraction flags ---

@@ -408,7 +408,11 @@ class SwissEph {
     final pAscmc = pkg_ffi.calloc<ffi.Double>(10);
     try {
       final ret = _bind.swe_houses(jdUt, geolat, geolon, hsys, pCusps, pAscmc);
-      final cusps = List<double>.generate(13, (i) => pCusps[i]);
+      if (ret < 0) {
+        throw SweException('House calculation failed', ret);
+      }
+      final cuspCount = hsys == 0x47 ? 37 : 13; // 'G' = Gauquelin sectors
+      final cusps = List<double>.generate(cuspCount, (i) => pCusps[i]);
       final ascmc = List<double>.generate(10, (i) => pAscmc[i]);
       return HouseResult(cusps: cusps, ascmc: ascmc, returnFlag: ret);
     } finally {
@@ -427,7 +431,11 @@ class SwissEph {
     try {
       final ret =
           _bind.swe_houses_ex(jdUt, flags, geolat, geolon, hsys, pCusps, pAscmc);
-      final cusps = List<double>.generate(13, (i) => pCusps[i]);
+      if (ret < 0) {
+        throw SweException('House calculation failed', ret);
+      }
+      final cuspCount = hsys == 0x47 ? 37 : 13; // 'G' = Gauquelin sectors
+      final cusps = List<double>.generate(cuspCount, (i) => pCusps[i]);
       final ascmc = List<double>.generate(10, (i) => pAscmc[i]);
       return HouseResult(cusps: cusps, ascmc: ascmc, returnFlag: ret);
     } finally {
@@ -454,9 +462,10 @@ class SwissEph {
         final msg = serr.cast<pkg_ffi.Utf8>().toDartString();
         throw SweException(msg, ret);
       }
-      final cusps = List<double>.generate(13, (i) => pCusps[i]);
+      final cuspCount = hsys == 0x47 ? 37 : 13; // 'G' = Gauquelin sectors
+      final cusps = List<double>.generate(cuspCount, (i) => pCusps[i]);
       final ascmc = List<double>.generate(10, (i) => pAscmc[i]);
-      final cuspSpeeds = List<double>.generate(13, (i) => pCuspSpeed[i]);
+      final cuspSpeeds = List<double>.generate(cuspCount, (i) => pCuspSpeed[i]);
       final ascmcSpeeds = List<double>.generate(10, (i) => pAscmcSpeed[i]);
       return HouseResultEx(
         cusps: cusps,
@@ -484,7 +493,11 @@ class SwissEph {
     try {
       final ret =
           _bind.swe_houses_armc(armc, geolat, eps, hsys, pCusps, pAscmc);
-      final cusps = List<double>.generate(13, (i) => pCusps[i]);
+      if (ret < 0) {
+        throw SweException('House calculation failed', ret);
+      }
+      final cuspCount = hsys == 0x47 ? 37 : 13; // 'G' = Gauquelin sectors
+      final cusps = List<double>.generate(cuspCount, (i) => pCusps[i]);
       final ascmc = List<double>.generate(10, (i) => pAscmc[i]);
       return HouseResult(cusps: cusps, ascmc: ascmc, returnFlag: ret);
     } finally {
@@ -511,9 +524,10 @@ class SwissEph {
         final msg = serr.cast<pkg_ffi.Utf8>().toDartString();
         throw SweException(msg, ret);
       }
-      final cusps = List<double>.generate(13, (i) => pCusps[i]);
+      final cuspCount = hsys == 0x47 ? 37 : 13; // 'G' = Gauquelin sectors
+      final cusps = List<double>.generate(cuspCount, (i) => pCusps[i]);
       final ascmc = List<double>.generate(10, (i) => pAscmc[i]);
-      final cuspSpeeds = List<double>.generate(13, (i) => pCuspSpeed[i]);
+      final cuspSpeeds = List<double>.generate(cuspCount, (i) => pCuspSpeed[i]);
       final ascmcSpeeds = List<double>.generate(10, (i) => pAscmcSpeed[i]);
       return HouseResultEx(
         cusps: cusps,
@@ -572,18 +586,28 @@ class SwissEph {
     double geoalt = 0,
     double atpress = 1013.25,
     double attemp = 15.0,
+    String? starName,
   }) {
     final geopos = pkg_ffi.calloc<ffi.Double>(3);
     final dgsect = pkg_ffi.calloc<ffi.Double>(1);
     final serr = pkg_ffi.calloc<ffi.Char>(256);
-    final starname = pkg_ffi.calloc<ffi.Char>(256); // empty for planets
+    final starnameBuf = pkg_ffi.calloc<ffi.Char>(256);
     try {
+      if (starName != null) {
+        final starBytes = starName.toNativeUtf8(allocator: pkg_ffi.calloc);
+        final len = starBytes.length;
+        for (int i = 0; i < len && i < 255; i++) {
+          starnameBuf[i] = starBytes.cast<ffi.Uint8>()[i];
+        }
+        starnameBuf[len.clamp(0, 255)] = 0;
+        pkg_ffi.calloc.free(starBytes);
+      }
       geopos[0] = geolon;
       geopos[1] = geolat;
       geopos[2] = geoalt;
 
       final ret = _bind.swe_gauquelin_sector(
-          jdUt, body, starname, flags, method, geopos, atpress, attemp,
+          jdUt, body, starnameBuf, flags, method, geopos, atpress, attemp,
           dgsect, serr);
       if (ret < 0) {
         final msg = serr.cast<pkg_ffi.Utf8>().toDartString();
@@ -594,7 +618,7 @@ class SwissEph {
       pkg_ffi.calloc.free(geopos);
       pkg_ffi.calloc.free(dgsect);
       pkg_ffi.calloc.free(serr);
-      pkg_ffi.calloc.free(starname);
+      pkg_ffi.calloc.free(starnameBuf);
     }
   }
 
@@ -697,6 +721,7 @@ class SwissEph {
         starName: resolvedName,
         longitude: xx[0], latitude: xx[1], distance: xx[2],
         longitudeSpeed: xx[3], latitudeSpeed: xx[4], distanceSpeed: xx[5],
+        returnFlag: ret,
       );
     } finally {
       pkg_ffi.calloc.free(starBuf);
@@ -731,6 +756,7 @@ class SwissEph {
         starName: resolvedName,
         longitude: xx[0], latitude: xx[1], distance: xx[2],
         longitudeSpeed: xx[3], latitudeSpeed: xx[4], distanceSpeed: xx[5],
+        returnFlag: ret,
       );
     } finally {
       pkg_ffi.calloc.free(starBuf);
@@ -777,7 +803,7 @@ class SwissEph {
     final serr = pkg_ffi.calloc<ffi.Char>(256);
     try {
       final result = _bind.swe_solcross_ut(longitude, jdUt, flags, serr);
-      if (result < 0) {
+      if (result < jdUt) {
         throw SweException(serr.cast<pkg_ffi.Utf8>().toDartString(), -1);
       }
       return result;
@@ -794,7 +820,7 @@ class SwissEph {
     final serr = pkg_ffi.calloc<ffi.Char>(256);
     try {
       final result = _bind.swe_solcross(longitude, jdEt, flags, serr);
-      if (result < 0) {
+      if (result < jdEt) {
         throw SweException(serr.cast<pkg_ffi.Utf8>().toDartString(), -1);
       }
       return result;
@@ -811,7 +837,7 @@ class SwissEph {
     final serr = pkg_ffi.calloc<ffi.Char>(256);
     try {
       final result = _bind.swe_mooncross_ut(longitude, jdUt, flags, serr);
-      if (result < 0) {
+      if (result < jdUt) {
         throw SweException(serr.cast<pkg_ffi.Utf8>().toDartString(), -1);
       }
       return result;
@@ -828,7 +854,7 @@ class SwissEph {
     final serr = pkg_ffi.calloc<ffi.Char>(256);
     try {
       final result = _bind.swe_mooncross(longitude, jdEt, flags, serr);
-      if (result < 0) {
+      if (result < jdEt) {
         throw SweException(serr.cast<pkg_ffi.Utf8>().toDartString(), -1);
       }
       return result;
@@ -847,7 +873,7 @@ class SwissEph {
     final serr = pkg_ffi.calloc<ffi.Char>(256);
     try {
       final result = _bind.swe_mooncross_node_ut(jdUt, flags, xlon, xlat, serr);
-      if (result < 0) {
+      if (result < jdUt) {
         throw SweException(serr.cast<pkg_ffi.Utf8>().toDartString(), -1);
       }
       return MoonNodeCrossResult(
@@ -872,7 +898,7 @@ class SwissEph {
     final serr = pkg_ffi.calloc<ffi.Char>(256);
     try {
       final result = _bind.swe_mooncross_node(jdEt, flags, xlon, xlat, serr);
-      if (result < 0) {
+      if (result < jdEt) {
         throw SweException(serr.cast<pkg_ffi.Utf8>().toDartString(), -1);
       }
       return MoonNodeCrossResult(
