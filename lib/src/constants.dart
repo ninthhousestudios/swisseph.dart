@@ -197,3 +197,141 @@ const int seBitDiscCenter = 256;
 const int seBitDiscBottom = 8192;
 const int seBitNoRefraction = 512;
 const int seBitHinduRising = 896; // disc center + no refraction + geocentric no ecl lat
+const int seBitGeoctrNoEclLat = 128;
+const int seBitCivilTwilight = 1024;
+const int seBitNauticTwilight = 2048;
+const int seBitAstroTwilight = 4096;
+const int seBitFixedDiscSize = 16384;
+
+// --- Node/apsides method flags ---
+
+/// Mean nodes/apsides
+const int seNodbitMean = 1;
+
+/// Osculating nodes/apsides
+const int seNodbitOscu = 2;
+
+/// Osculating, motion about solar system barycenter
+const int seNodbitOscuBar = 4;
+
+/// Focal point of orbit instead of aphelion
+const int seNodbitFopoint = 256;
+
+// --- Heliacal event types ---
+
+/// Heliacal rising (= morning first)
+const int seHeliacalRising = 1;
+
+/// Heliacal setting (= evening last)
+const int seHeliacalSetting = 2;
+
+/// Morning first (= heliacal rising)
+const int seMorningFirst = 1;
+
+/// Evening last (= heliacal setting)
+const int seEveningLast = 2;
+
+/// Evening first
+const int seEveningFirst = 3;
+
+/// Morning last
+const int seMorningLast = 4;
+
+// --- Heliacal flags ---
+
+const int seHelflagLongSearch = 128;
+const int seHelflagHighPrecision = 256;
+const int seHelflagOpticalParams = 512;
+const int seHelflagNoDetails = 1024;
+
+// --- Sidereal mode bits ---
+
+/// Project onto ecliptic of t0
+const int seSidbitEclT0 = 256;
+
+/// Project onto solar system plane
+const int seSidbitSsyPlane = 512;
+
+/// User-defined UT
+const int seSidbitUserUt = 1024;
+
+/// Project onto ecliptic of date
+const int seSidbitEclDate = 2048;
+
+/// No precession offset
+const int seSidbitNoPrecOffset = 4096;
+
+/// Original precession
+const int seSidbitPrecOrig = 8192;
+
+// --- Special body IDs ---
+
+/// Ecliptic/nutation (special body for swe_calc)
+const int seEclNut = -1;
+
+// --- Additional calc flags ---
+
+/// J2000 equator/ecliptic
+const int seFlgJ2000 = 32;
+
+/// No nutation
+const int seFlgNoNut = 64;
+
+/// Speed from 3-body formula (less precise)
+const int seFlgSpeed3 = 128;
+
+/// JPL Horizons mode
+const int seFlgJplHor = 262144;
+
+/// JPL Horizons approximation mode
+const int seFlgJplHorApprox = 524288;
+
+/// Center body (for swe_calc)
+const int seFlgCenterBody = 1048576;
+
+// --- Azimuth/altitude conversion flags ---
+
+/// Ecliptic to horizon
+const int seEcl2hor = 0;
+/// Equatorial to horizon
+const int seEqu2hor = 1;
+/// Horizon to ecliptic
+const int seHor2ecl = 0;
+/// Horizon to equatorial
+const int seHor2equ = 1;
+
+// --- Refraction flags ---
+
+/// True altitude to apparent altitude
+const int seTrueToApp = 0;
+/// Apparent altitude to true altitude
+const int seAppToTrue = 1;
+
+// --- Split degree flags ---
+
+const int seSplitDegRoundSec = 1;
+const int seSplitDegRoundMin = 2;
+const int seSplitDegRoundDeg = 4;
+const int seSplitDegZodiacal = 8;
+const int seSplitDegKeepSign = 16;
+const int seSplitDegKeepDeg = 32;
+const int seSplitDegNakshatra = 1024;
+
+// --- Eclipse type flags ---
+
+const int seEclCentral = 1;
+const int seEclNoncentral = 2;
+const int seEclTotal = 4;
+const int seEclAnnular = 8;
+const int seEclPartial = 16;
+const int seEclHybrid = 32; // annular-total
+const int seEclPenumbral = 64;
+const int seEclVisible = 128;
+const int seEclMaxVisible = 256;
+const int seEclPartbegVisible = 512;
+const int seEclTotbegVisible = 1024;
+const int seEclTotendVisible = 2048;
+const int seEclPartendVisible = 4096;
+const int seEclPenumbbegVisible = 8192;
+const int seEclPenumbendVisible = 16384;
+const int seEclOneTry = 32768;

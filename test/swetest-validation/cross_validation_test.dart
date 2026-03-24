@@ -110,7 +110,8 @@ void main() {
     test('all planet/date combinations match swetest', () {
       final entries = _ref['planet_positions_moshier'] as List;
       var tested = 0;
-      for (final entry in entries) {
+      for (final e in entries) {
+        final entry = e as Map<String, dynamic>;
         if (entry.containsKey('error')) continue;
         final jd = (entry['jd'] as num).toDouble();
         final body = entry['body'] as int;
@@ -118,12 +119,11 @@ void main() {
         final name = entry['body_name'] as String;
         final date = entry['date'];
 
-        CalcResult result;
+        late CalcResult result;
         try {
           result = _swe.calcUt(jd, body, flags);
         } on SweException {
           fail('calcUt threw for $name at ${date['year']}-${date['month']}-${date['day']}');
-          return;
         }
 
         expect(result.longitude,
@@ -233,7 +233,8 @@ void main() {
     test('all house system/location/date combinations match', () {
       final entries = _ref['house_cusps'] as List;
       var tested = 0;
-      for (final entry in entries) {
+      for (final e in entries) {
+        final entry = e as Map<String, dynamic>;
         if (entry.containsKey('error')) continue;
 
         final jd = (entry['jd'] as num).toDouble();
@@ -323,7 +324,8 @@ void main() {
     test('all rise/set events match swetest', () {
       final entries = _ref['rise_set'] as List;
       var tested = 0;
-      for (final entry in entries) {
+      for (final e in entries) {
+        final entry = e as Map<String, dynamic>;
         if (entry.containsKey('error')) continue;
 
         final jd = (entry['jd'] as num).toDouble();
