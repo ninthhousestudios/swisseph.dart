@@ -12,32 +12,46 @@ The build hook packages (`hooks`, `code_assets`, `native_toolchain_c`) are in `d
 
 ```
 csrc/                      # vendored Swiss Ephemeris C source (Astrodienst AG)
+ephe/                      # bundled .se1 ephemeris data files (~5400 BC – 5400 AD)
 lib/swisseph.dart          # barrel export
-lib/src/swiss_eph.dart     # SwissEph class — all public API
-lib/src/bindings.dart      # SweBindings — raw dart:ffi lookups (package-private)
-lib/src/constants.dart     # SE_* integer constants from swephexp.h
-lib/src/types.dart         # CalcResult, HouseResult, DateResult, etc.
+lib/src/swiss_eph.dart     # SwissEph class — ~88 public methods
+lib/src/bindings.dart      # SweBindings — 75 raw dart:ffi lookups (package-private)
+lib/src/constants.dart     # ~250 integer constants from swephexp.h
+lib/src/types.dart         # 30+ result types (all immutable, const constructors)
 hook/build.dart            # native asset build hook (CBuilder)
+doc/architecture-0.2.md    # detailed architecture document
 ```
 
 ## API surface
 
-`SwissEph` is the only public class. It wraps a `DynamicLibrary` and exposes 15 methods:
+`SwissEph` is the only public class. It wraps a `DynamicLibrary` and exposes ~88 methods across these categories:
 
-- `julday`, `revjul` — date conversion
-- `setEphePath`, `setSidMode`, `setTopo`, `close`, `version` — configuration
-- `calcUt` — planetary positions (returns `CalcResult`)
-- `houses` — house cusps (returns `HouseResult`)
-- `getAyanamsaUt`, `getAyanamsaExUt`, `getAyanamsaName` — ayanamsa
-- `getPlanetName`, `houseName` — name lookups
-- `riseTrans` — rise/set/transit times
-- `degnorm` — normalize degrees to 0-360
+- **Date/time** (14): `julday`, `revjul`, `utcToJd`, `jdToUtc`, `jdetToUtc`, `utcTimeZone`, `dayOfWeek`, `deltat`, `deltatEx`, `timeEqu`, `sidTime`, `sidTime0`, `lmtToLat`, `latToLmt`
+- **Config** (13): `setEphePath`, `setSidMode`, `setTopo`, `setJplFile`, `setInterpolateNut`, `setLapseRate`, `setDeltaTUserdef`, `setTidAcc`, `getTidAcc`, `getLibraryPath`, `getCurrentFileData`, `close`, `version`
+- **Positions** (8): `calcUt`, `calc`, `nodApsUt`, `nodAps`, `getOrbitalElements`, `orbitMaxMinTrueDistance`, `phenoUt`, `pheno`
+- **Fixed stars** (3): `fixstar2Ut`, `fixstar2`, `fixstar2Mag`
+- **Houses** (7): `houses`, `housesEx`, `housesEx2`, `housesArmc`, `housesArmcEx2`, `housePos`, `gauquelinSector`
+- **Ayanamsa** (5): `getAyanamsaUt`, `getAyanamsa`, `getAyanamsaExUt`, `getAyanamsaEx`, `getAyanamsaName`
+- **Eclipses** (10): `solEclipseWhenLoc`, `solEclipseWhenGlob`, `solEclipseHow`, `solEclipseWhere`, `lunEclipseWhen`, `lunEclipseWhenLoc`, `lunEclipseHow`, `lunOccultWhenLoc`, `lunOccultWhenGlob`, `lunOccultWhere`
+- **Crossings** (8): `solCrossUt`, `solCross`, `moonCrossUt`, `moonCross`, `moonCrossNodeUt`, `moonCrossNode`, `helioCrossUt`, `helioCross`
+- **Rise/set** (2): `riseTrans`, `riseTransTrueHor`
+- **Heliacal** (3): `heliacalUt`, `heliacalPhenoUt`, `visLimitMag`
+- **Coordinates** (5): `azAlt`, `azAltRev`, `cotrans`, `refrac`, `refracExtended`
+- **Names** (2): `getPlanetName`, `houseName`
+- **Utilities** (7): `degnorm`, `radNorm`, `degMidp`, `radMidp`, `difDegn`, `difDeg2n`, `splitDeg`
 
 All native memory uses `calloc` + `try/finally free`. Errors throw `SweException`.
 
+## Error patterns
+
+Three C error patterns exist — see `doc/architecture-0.2.md` for details:
+1. **Negative return + error buffer** — most functions (`calcUt`, `housesEx2`, etc.)
+2. **JD sentinel** — crossing functions return `jdStart - 1` on error; check `result < jdStart`
+3. **Integer return + output pointer** — heliocentric crossings; check `ret < 0`
+
 ## Constants
 
-Integer constants, not enums. Prefixes: `se` (bodies), `seflg` (calc flags), `hsys` (house systems), `seSidm` (ayanamsa modes), `seCalc` (rise/set). See `lib/src/constants.dart`.
+Integer constants, not enums. Prefixes: `se` (bodies), `seflg` (calc flags), `hsys` (house systems), `seSidm` (ayanamsa modes), `seCalc` (rise/set), `seEcl` (eclipses), `seNodbit` (nodes), `seHelflag` (heliacal), `seSidbit` (sidereal bits), `seSplitDeg` (degree splitting). See `lib/src/constants.dart`.
 
 ## Isolate safety
 
@@ -62,4 +76,5 @@ dart test
 1. Add `late final` lookup in `lib/src/bindings.dart`
 2. Add public method in `lib/src/swiss_eph.dart`
 3. Add result type in `lib/src/types.dart` if needed
-4. Write test
+4. Add constants to `lib/src/constants.dart` if needed
+5. Write test

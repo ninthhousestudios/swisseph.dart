@@ -3,22 +3,30 @@
 Dart FFI bindings to the [Swiss Ephemeris](https://www.astro.com/swisseph/)
 C library.
 
-Compute planetary positions, house cusps, ayanamsa values, and rise/set
-times — with no code generation, no Flutter dependency, and full isolate
-safety.
+Compute planetary positions, house cusps, ayanamsa values, rise/set
+times, eclipses, crossings, heliacal events, and coordinate transforms —
+with no code generation, no Flutter dependency, and full isolate safety.
 
 ## Features
 
-- **15 methods** covering positions, houses, ayanamsa, rise/set, date
-  conversion, and configuration
+- **~88 methods** covering the near-complete Swiss Ephemeris API
 - **All 47 standard ayanamsas** — Lahiri, Fagan-Bradley, Raman,
   Krishnamurti, and 43 more
-- **11 house systems** — Placidus, Koch, Whole Sign, Campanus, Equal,
-  and more
+- **14 house systems** — Placidus, Koch, Whole Sign, Campanus, Equal,
+  Gauquelin sectors, and more
+- **Solar and lunar eclipses** — global and local search, attributes,
+  geographic location of greatest eclipse
+- **Planetary occultations** — lunar occultation search and location
+- **Sun/Moon/heliocentric crossings** — find when bodies cross a longitude
+- **Heliacal events** — rising, setting, visibility limits
+- **Coordinate transforms** — horizon, ecliptic, equatorial, refraction
+- **Nodes and apsides** — mean, osculating, barycentric
+- **Orbital elements** — osculating elements, distance extremes
+- **Phase and magnitude** — elongation, phase angle, apparent magnitude
 - **Three ephemeris engines** — Moshier (no files needed), Swiss
   Ephemeris (.se1 files), JPL
 - **Multiple coordinate systems** — tropical, sidereal, heliocentric,
-  barycentric, equatorial
+  barycentric, equatorial, topocentric
 - **Isolate-safe** — each instance wraps its own `DynamicLibrary`; copy
   the `.so` per isolate for independent C global state
 - **Instance-based API** — no singletons, no hidden state
@@ -32,6 +40,7 @@ safety.
 | Linux    | Supported (gcc/clang) |
 | macOS    | Supported (clang)     |
 | Windows  | Supported (MSVC)      |
+| Android  | Supported (NDK)       |
 
 Requires Dart SDK 3.11+ and a C compiler.
 
@@ -45,7 +54,7 @@ Or add it to your `pubspec.yaml` directly:
 
 ```yaml
 dependencies:
-  swisseph: ^0.1.0
+  swisseph: ^0.2.0
 ```
 
 Alternatively, install from the Git repository:
@@ -95,6 +104,17 @@ void main() {
   );
   print('Sunrise JD: ${rise.transitTime}');
 
+  // Next solar eclipse visible from Washington DC
+  final eclipse = swe.solEclipseWhenLoc(
+    jd, seflgSwieph,
+    geolon: -77.0365, geolat: 38.8977,
+  );
+  print('Next solar eclipse: JD ${eclipse.maxEclipse}');
+
+  // Next Sun crossing of 0° Aries
+  final cross = swe.solCrossUt(0.0, jd, seflgSwieph);
+  print('Next vernal equinox: JD $cross');
+
   swe.close();
 }
 ```
@@ -104,16 +124,24 @@ with formatted output.
 
 ## API reference
 
-| Category  | Methods                                                      |
-|-----------|--------------------------------------------------------------|
-| Date/time | `julday`, `revjul`                                           |
-| Config    | `setEphePath`, `setSidMode`, `setTopo`, `close`, `version`   |
-| Positions | `calcUt`                                                     |
-| Houses    | `houses`                                                     |
-| Ayanamsa  | `getAyanamsaUt`, `getAyanamsaExUt`, `getAyanamsaName`        |
-| Names     | `getPlanetName`, `houseName`                                 |
-| Rise/set  | `riseTrans`                                                  |
-| Utilities | `degnorm`                                                    |
+| Category    | Methods                                                                                    |
+|-------------|--------------------------------------------------------------------------------------------|
+| Date/time   | `julday`, `revjul`, `utcToJd`, `jdToUtc`, `jdetToUtc`, `utcTimeZone`, `dayOfWeek`, `deltat`, `deltatEx`, `timeEqu`, `sidTime`, `sidTime0`, `lmtToLat`, `latToLmt` |
+| Config      | `setEphePath`, `setSidMode`, `setTopo`, `setJplFile`, `setInterpolateNut`, `setLapseRate`, `setDeltaTUserdef`, `setTidAcc`, `getTidAcc`, `getLibraryPath`, `getCurrentFileData`, `close`, `version` |
+| Positions   | `calcUt`, `calc`                                                                           |
+| Houses      | `houses`, `housesEx`, `housesEx2`, `housesArmc`, `housesArmcEx2`, `housePos`, `gauquelinSector` |
+| Ayanamsa    | `getAyanamsaUt`, `getAyanamsa`, `getAyanamsaExUt`, `getAyanamsaEx`, `getAyanamsaName`      |
+| Fixed stars | `fixstar2Ut`, `fixstar2`, `fixstar2Mag`                                                    |
+| Eclipses    | `solEclipseWhenLoc`, `solEclipseWhenGlob`, `solEclipseHow`, `solEclipseWhere`, `lunEclipseWhen`, `lunEclipseWhenLoc`, `lunEclipseHow`, `lunOccultWhenLoc`, `lunOccultWhenGlob`, `lunOccultWhere` |
+| Crossings   | `solCrossUt`, `solCross`, `moonCrossUt`, `moonCross`, `moonCrossNodeUt`, `moonCrossNode`, `helioCrossUt`, `helioCross` |
+| Rise/set    | `riseTrans`, `riseTransTrueHor`                                                            |
+| Nodes       | `nodApsUt`, `nodAps`                                                                       |
+| Orbits      | `getOrbitalElements`, `orbitMaxMinTrueDistance`                                             |
+| Phenomena   | `phenoUt`, `pheno`                                                                         |
+| Heliacal    | `heliacalUt`, `heliacalPhenoUt`, `visLimitMag`                                             |
+| Coordinates | `azAlt`, `azAltRev`, `cotrans`, `refrac`, `refracExtended`                                 |
+| Names       | `getPlanetName`, `houseName`                                                               |
+| Utilities   | `degnorm`, `radNorm`, `degMidp`, `radMidp`, `difDegn`, `difDeg2n`, `splitDeg`              |
 
 All native memory uses `calloc` + `try/finally free`. Errors throw
 `SweException`.
@@ -163,7 +191,7 @@ final sun = swe.calcUt(jd, seSun, seflgSwieph | seflgSpeed);
 ```
 
 This resolves to the `ephe/` directory in the pub cache (e.g.
-`~/.pub-cache/hosted/pub.dev/swisseph-0.1.1/ephe/`) regardless of
+`~/.pub-cache/hosted/pub.dev/swisseph-0.2.0/ephe/`) regardless of
 where your project lives.
 
 ### What's not included
@@ -183,13 +211,18 @@ Download any additional files you need into the same `ephe/` directory.
 
 Integer constants, not enums. Defined in `lib/src/constants.dart`.
 
-| Prefix   | Purpose           | Example           |
-|----------|-------------------|-------------------|
-| `se`     | Body IDs          | `seSun`, `seMoon` |
-| `seflg`  | Calculation flags | `seflgSpeed`      |
-| `hsys`   | House systems     | `hsysPlacidus`    |
-| `seSidm` | Ayanamsa modes    | `seSidmLahiri`    |
-| `seCalc` | Rise/set flags    | `seCalcRise`      |
+| Prefix    | Purpose            | Example              |
+|-----------|--------------------|----------------------|
+| `se`      | Body IDs           | `seSun`, `seMoon`    |
+| `seflg`   | Calculation flags  | `seflgSpeed`         |
+| `hsys`    | House systems      | `hsysPlacidus`       |
+| `seSidm`  | Ayanamsa modes     | `seSidmLahiri`       |
+| `seCalc`  | Rise/set flags     | `seCalcRise`         |
+| `seEcl`   | Eclipse types      | `seEclTotal`         |
+| `seNodbit` | Node/apsides flags | `seNodbitMean`       |
+| `seBit`   | Rise/transit flags | `seBitDiscCenter`    |
+| `seHelflag` | Heliacal flags   | `seHelflagLongSearch` |
+| `seSidbit` | Sidereal mode bits | `seSidbitEclT0`     |
 
 ## Isolate safety
 

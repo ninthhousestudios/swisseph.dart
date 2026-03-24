@@ -1,3 +1,117 @@
+## 0.2.0
+
+Major API expansion — 15 methods to ~88 methods, covering nearly the full
+Swiss Ephemeris C API surface.
+
+### New methods
+
+**Planetary calculations:**
+- `calc` (ET variant of `calcUt`)
+- `nodApsUt`, `nodAps` — planetary nodes and apsides
+- `getOrbitalElements` — osculating orbital elements
+- `orbitMaxMinTrueDistance` — orbital distance extremes
+- `phenoUt`, `pheno` — phase angle, elongation, magnitude
+
+**Fixed stars:**
+- `fixstar2Ut`, `fixstar2` — fixed star positions
+- `fixstar2Mag` — visual magnitude lookup
+
+**Houses (expanded):**
+- `housesEx` — house cusps with extra flags
+- `housesEx2` — house cusps with speeds
+- `housesArmc` — houses from ARMC (no date needed)
+- `housesArmcEx2` — houses from ARMC with speeds
+- `housePos` — house position of a body
+- `gauquelinSector` — Gauquelin sector position
+
+**Eclipses:**
+- `solEclipseWhenLoc`, `solEclipseWhenGlob` — find solar eclipses
+- `solEclipseHow` — solar eclipse attributes at a location
+- `solEclipseWhere` — geographic location of greatest eclipse
+- `lunEclipseWhen`, `lunEclipseWhenLoc` — find lunar eclipses
+- `lunEclipseHow` — lunar eclipse attributes
+- `lunOccultWhenLoc`, `lunOccultWhenGlob` — planetary occultations
+- `lunOccultWhere` — geographic location of greatest occultation
+
+**Crossings:**
+- `solCrossUt`, `solCross` — Sun crossing a longitude
+- `moonCrossUt`, `moonCross` — Moon crossing a longitude
+- `moonCrossNodeUt`, `moonCrossNode` — Moon crossing its own node
+- `helioCrossUt`, `helioCross` — heliocentric longitude crossing
+
+**Date/time (expanded):**
+- `utcToJd`, `jdToUtc`, `jdetToUtc` — UTC/JD conversions
+- `utcTimeZone` — UTC to local time zone
+- `dayOfWeek` — day of week for a Julian Day
+- `deltat`, `deltatEx` — Delta T (ET minus UT)
+- `timeEqu` — equation of time
+- `sidTime`, `sidTime0` — sidereal time
+- `lmtToLat`, `latToLmt` — local mean/apparent time conversion
+
+**Coordinate transforms:**
+- `azAlt` — ecliptic/equatorial to horizon
+- `azAltRev` — horizon to ecliptic/equatorial
+- `cotrans` — ecliptic/equatorial coordinate transform
+- `refrac`, `refracExtended` — atmospheric refraction
+- `splitDeg` — decimal degrees to d/m/s
+- `radNorm`, `degMidp`, `radMidp`, `difDegn`, `difDeg2n` — degree/radian math
+
+**Rise/set (expanded):**
+- `riseTransTrueHor` — rise/set with true horizon
+
+**Heliacal:**
+- `heliacalUt` — heliacal rising/setting
+- `heliacalPhenoUt` — heliacal phenomenon data
+- `visLimitMag` — limiting visual magnitude
+
+**Configuration (expanded):**
+- `setJplFile` — set JPL ephemeris file
+- `getLibraryPath` — path to loaded shared library
+- `getCurrentFileData` — loaded data file info
+- `setInterpolateNut` — nutation interpolation toggle
+- `setLapseRate` — atmospheric lapse rate
+- `setDeltaTUserdef` — override Delta T
+- `setTidAcc`, `getTidAcc` — tidal acceleration
+- `getAyanamsa`, `getAyanamsaEx` — ET ayanamsa variants
+
+### Bug fixes (from external code review)
+
+- **Gauquelin cusp truncation** — house methods now return all 37 cusps
+  for Gauquelin sectors (`hsys='G'`), not just 13. Affected: `houses`,
+  `housesEx`, `housesEx2`, `housesArmc`, `housesArmcEx2`.
+- **Crossing function error detection** — `solCross*`, `moonCross*`, and
+  `moonCrossNode*` now check `result < jdStart` (matching the C error
+  sentinel) instead of `result < 0`, which was a no-op for modern dates.
+- **Missing error throws** — `houses()`, `housesEx()`, `housesArmc()` now
+  throw `SweException` on failure (consistent with `housesEx2`).
+- **FixstarResult returnFlag** — `fixstar2Ut` and `fixstar2` now populate
+  the `returnFlag` field.
+- **gauquelinSector starName** — added optional `starName` parameter for
+  fixed-star sector calculations.
+- **Constant and doc fixes** — added `hsysGauquelin` constant, clarified
+  `seEcl2hor`/`seHor2ecl` docs (direction comes from function, not flag),
+  documented `SplitDegResult.sign` zodiacal behavior, documented
+  `RiseTransResult` circumpolar behavior (returnFlag -2).
+
+### New types
+
+`HouseResultEx`, `FixstarResult`, `MoonNodeCrossResult`, `JulianDayPair`,
+`DateTimeResult`, `FileDataResult`, `NodeApsResult`,
+`OrbitalElementsResult`, `OrbitDistanceResult`, `PhenoResult`,
+`SolarEclipseLocalResult`, `SolarEclipseGlobalResult`,
+`SolarEclipseAttrResult`, `EclipseWhereResult`,
+`LunarEclipseGlobalResult`, `LunarEclipseLocalResult`,
+`LunarEclipseAttrResult`, `AzAltResult`, `AzAltRevResult`,
+`CoTransResult`, `RefracResult`, `HeliacalResult`,
+`HeliacalPhenoResult`, `VisLimitResult`, `AtmoConditions`,
+`ObserverConditions`.
+
+### Other
+
+- FFI bindings expanded from 16 to 75.
+- Constants expanded with eclipse flags, node/apsides flags, heliacal
+  event types, sidereal mode bits, split degree flags, and refraction flags.
+
 ## 0.1.2
 
 - Fix Android/NDK linking: link `libm` explicitly via `libraries: ['m']`
