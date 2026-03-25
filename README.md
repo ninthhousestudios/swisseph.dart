@@ -243,8 +243,10 @@ final swe = SwissEph(libPath);
 ```
 
 See [`test/isolate_test.dart`](test/isolate_test.dart) for the full
-pattern. The [stress test](test/stress-test.md) runs 3.06 billion
-calculations across 100 isolates to prove this holds at scale.
+pattern. The stress tests run up to
+[4.11 billion calculations](test/stress-test-0.2/stress-test-0.2.md)
+across 100 isolates covering all 88 public methods to prove this holds
+at scale.
 
 ## Limitations
 
@@ -269,9 +271,18 @@ dart test
 - 545-value cross-validation suite against
   [pyswisseph](https://gitlab.com/ninthhouse/libaditya) covering
   13 bodies, 14 ayanamsas, 11 house systems, 7 locations, 7 dates
-- Stress test: 3.06 billion calculations across 100 isolates (Moshier +
-  Swiss Ephemeris, all 47 ayanamsas, heliocentric, barycentric,
-  equatorial). See [`test/stress-test.md`](test/stress-test.md).
+- **Stress test 0.1:** 3.06 billion calculations across 100 isolates
+  (`calcUt` + `houses`, Moshier + Swiss Ephemeris, all 47 ayanamsas,
+  heliocentric, barycentric, equatorial).
+  See [`test/stress-test.md`](test/stress-test.md).
+- **Stress test 0.2:** 4.11 billion calculations across 100 isolates
+  covering **all 88 public methods** — positions, houses, ayanamsas,
+  date/time, fixed stars, eclipses, crossings, rise/set, heliacal
+  events, coordinates, nodes, orbital elements, and Gauquelin sectors.
+  Tests two ephemeris engines, 52 ayanamsa modes, 11 house systems,
+  8 locations (including polar), and 5,000 years of dates. Verifies
+  isolate isolation, API coverage, and expected error paths.
+  See [`test/stress-test-0.2/stress-test-0.2.md`](test/stress-test-0.2/stress-test-0.2.md).
 
 ## License
 
