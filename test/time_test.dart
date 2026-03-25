@@ -23,7 +23,7 @@ void main() {
 
     test('deltatEx matches deltat for Moshier', () {
       final dt1 = swe.deltat(2451545.0);
-      final dt2 = swe.deltatEx(2451545.0, seflgMoseph);
+      final dt2 = swe.deltatEx(2451545.0, seFlgMosEph);
       expect(dt2, closeTo(dt1, 1e-10));
     });
   });

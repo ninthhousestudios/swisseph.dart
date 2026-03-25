@@ -166,7 +166,7 @@ void main() {
 
         _swe.setSidMode(sidId);
         final result = _swe.calcUt(
-          jd, body, seflgMoseph | seflgSpeed | seflgSidereal,
+          jd, body, seFlgMosEph | seFlgSpeed | seFlgSidereal,
         );
 
         expect(result.longitude,
@@ -201,7 +201,7 @@ void main() {
         // Use getAyanamsaExUt with MOSEPH flag to match swetest's -emos mode.
         // getAyanamsaUt uses a different internal ephemeris path and produces
         // values ~0.004° different for some ayanamsas.
-        final result = _swe.getAyanamsaExUt(jd, seflgMoseph);
+        final result = _swe.getAyanamsaExUt(jd, seFlgMosEph);
 
         final tol = trueAyanamsas.contains(sidId) ? _epsLoose : _eps;
         expect(result.ayanamsa, closeTo(expected, tol),
@@ -342,7 +342,7 @@ void main() {
 
         final result = _swe.riseTrans(
           jd, body,
-          epheflag: seflgMoseph,
+          epheflag: seFlgMosEph,
           rsmi: flag,
           geolon: lon,
           geolat: lat,
@@ -393,7 +393,7 @@ void main() {
 
         _swe.setTopo(lon, lat, alt);
         final result = _swe.calcUt(
-          jd, body, seflgMoseph | seflgSpeed | seflgTopoctr,
+          jd, body, seFlgMosEph | seFlgSpeed | seFlgTopoCtr,
         );
 
         expect(result.longitude,
@@ -422,7 +422,7 @@ void main() {
         final bodyName = entry['body_name'] as String;
 
         final result = _swe.calcUt(
-          jd, body, seflgMoseph | seflgSpeed | seflgEquatorial,
+          jd, body, seFlgMosEph | seFlgSpeed | seFlgEquatorial,
         );
 
         // In equatorial mode, longitude=RA, latitude=Dec
@@ -454,7 +454,7 @@ void main() {
         final tol = trueAyanamsas.contains(sidId) ? _epsLoose : _eps;
 
         _swe.setSidMode(sidId);
-        final result = _swe.getAyanamsaExUt(jd, seflgMoseph);
+        final result = _swe.getAyanamsaExUt(jd, seFlgMosEph);
 
         expect(result.ayanamsa, closeTo(expected, tol),
             reason: 'getAyanamsaExUt(sidId=$sidId) at JD=$jd');

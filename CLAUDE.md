@@ -51,7 +51,7 @@ Three C error patterns exist — see `doc/architecture-0.2.md` for details:
 
 ## Constants
 
-Integer constants, not enums. Prefixes: `se` (bodies), `seflg` (calc flags), `hsys` (house systems), `seSidm` (ayanamsa modes), `seCalc` (rise/set), `seEcl` (eclipses), `seNodbit` (nodes), `seHelflag` (heliacal), `seSidbit` (sidereal bits), `seSplitDeg` (degree splitting). See `lib/src/constants.dart`.
+Integer constants, not enums. Prefixes: `se` (bodies), `seFlg` (calc flags), `hsys` (house systems), `seSidm` (ayanamsa modes), `seCalc` (rise/set), `seEcl` (eclipses), `seNodBit` (nodes), `seHelFlag` (heliacal), `seSidBit` (sidereal bits), `seSplitDeg` (degree splitting). See `lib/src/constants.dart`.
 
 ## Isolate safety
 

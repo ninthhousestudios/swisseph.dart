@@ -1,3 +1,15 @@
+## 0.3.0
+
+**Breaking:** All constants renamed to consistent camelCase.
+
+- Flag prefixes now properly capitalize sub-words: `seflgSwieph` → `seFlgSwiEph`, `seflgSpeed` → `seFlgSpeed`, etc.
+- Node/apsides: `seNodbit*` → `seNodBit*`
+- Heliacal flags: `seHelflag*` → `seHelFlag*`
+- Sidereal bits: `seSidbit*` → `seSidBit*`
+- Eclipse visibility: `seEclPartbegVisible` → `seEclPartBegVisible`, etc.
+- Rise/set: `seCalcMtransit` → `seCalcMTransit`, `seBitGeoctrNoEclLat` → `seBitGeoCtrNoEclLat`
+- Stress tests excluded from default `dart test` run (use `dart test -t stress`)
+
 ## 0.2.0
 
 Major API expansion — 15 methods to ~88 methods, covering nearly the full

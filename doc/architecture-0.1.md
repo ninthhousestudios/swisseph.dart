@@ -9,7 +9,7 @@
 │  Dart application code                          │
 │    import 'package:swisseph/swisseph.dart';     │
 │    final swe = SwissEph.find();                 │
-│    swe.calcUt(jd, seSun, seflgMoseph);          │
+│    swe.calcUt(jd, seSun, seFlgMosEph);          │
 └──────────────────┬──────────────────────────────┘
                    │
 ┌──────────────────▼──────────────────────────────┐
@@ -157,7 +157,7 @@ All immutable, with `const` constructors:
 
 **Naming convention:** Dart lowerCamelCase derived from the C macro name:
 - `SE_SUN` → `seSun`
-- `SEFLG_SPEED` → `seflgSpeed`
+- `SEFLG_SPEED` → `seFlgSpeed`
 - `SE_SIDM_LAHIRI` → `seSidmLahiri`
 - `SE_HSYS_CAMPANUS` is not a C name — house systems are ASCII codes, so we define `hsysCampanus = 0x43` ('C')
 
@@ -196,9 +196,9 @@ The Swiss Ephemeris supports three calculation backends:
 
 | Mode | Flag | Files needed | Accuracy |
 |------|------|-------------|----------|
-| Moshier | `seflgMoseph` | None | ~1 arcsecond |
-| Swiss Ephemeris | `seflgSwieph` | `.se1` files via `setEphePath()` | Sub-arcsecond |
-| JPL | `seflgJpleph` | JPL ephemeris files | Highest |
+| Moshier | `seFlgMosEph` | None | ~1 arcsecond |
+| Swiss Ephemeris | `seFlgSwiEph` | `.se1` files via `setEphePath()` | Sub-arcsecond |
+| JPL | `seFlgJplEph` | JPL ephemeris files | Highest |
 
 All tests use Moshier mode so they run without external data files.
 

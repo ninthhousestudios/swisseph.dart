@@ -1,3 +1,4 @@
+@Tags(['stress'])
 @Timeout(Duration(minutes: 180))
 library;
 
@@ -118,11 +119,11 @@ List<CalcSpec> _buildCalcSpecs() {
   final specs = <CalcSpec>[];
 
   const moshierGeoFlags = [
-    seflgMoseph | seflgSpeed,
-    seflgMoseph | seflgSpeed | seflgEquatorial,
-    seflgMoseph | seflgSpeed | seflgTruepos,
-    seflgMoseph | seflgSpeed | seflgNoaberr,
-    seflgMoseph | seflgSpeed | seflgNogdefl,
+    seFlgMosEph | seFlgSpeed,
+    seFlgMosEph | seFlgSpeed | seFlgEquatorial,
+    seFlgMosEph | seFlgSpeed | seFlgTruePos,
+    seFlgMosEph | seFlgSpeed | seFlgNoAberr,
+    seFlgMosEph | seFlgSpeed | seFlgNoGdefl,
   ];
   for (final flags in moshierGeoFlags) {
     for (final body in moshierGeocentricBodies) {
@@ -131,8 +132,8 @@ List<CalcSpec> _buildCalcSpecs() {
   }
 
   const moshierHelioFlags = [
-    seflgMoseph | seflgSpeed | seflgHelctr,
-    seflgMoseph | seflgSpeed | seflgHelctr | seflgEquatorial,
+    seFlgMosEph | seFlgSpeed | seFlgHelCtr,
+    seFlgMosEph | seFlgSpeed | seFlgHelCtr | seFlgEquatorial,
   ];
   for (final flags in moshierHelioFlags) {
     for (final body in helioBodies) {
@@ -141,15 +142,15 @@ List<CalcSpec> _buildCalcSpecs() {
   }
 
   for (final body in moshierGeocentricBodies) {
-    specs.add(CalcSpec(seflgMoseph | seflgSpeed | seflgSidereal, body, true));
+    specs.add(CalcSpec(seFlgMosEph | seFlgSpeed | seFlgSidereal, body, true));
   }
 
   const sweGeoFlags = [
-    seflgSwieph | seflgSpeed,
-    seflgSwieph | seflgSpeed | seflgEquatorial,
-    seflgSwieph | seflgSpeed | seflgTruepos,
-    seflgSwieph | seflgSpeed | seflgNoaberr,
-    seflgSwieph | seflgSpeed | seflgNogdefl,
+    seFlgSwiEph | seFlgSpeed,
+    seFlgSwiEph | seFlgSpeed | seFlgEquatorial,
+    seFlgSwiEph | seFlgSpeed | seFlgTruePos,
+    seFlgSwiEph | seFlgSpeed | seFlgNoAberr,
+    seFlgSwiEph | seFlgSpeed | seFlgNoGdefl,
   ];
   for (final flags in sweGeoFlags) {
     for (final body in sweGeocentricBodies) {
@@ -158,8 +159,8 @@ List<CalcSpec> _buildCalcSpecs() {
   }
 
   const sweHelioFlags = [
-    seflgSwieph | seflgSpeed | seflgHelctr,
-    seflgSwieph | seflgSpeed | seflgHelctr | seflgEquatorial,
+    seFlgSwiEph | seFlgSpeed | seFlgHelCtr,
+    seFlgSwiEph | seFlgSpeed | seFlgHelCtr | seFlgEquatorial,
   ];
   for (final flags in sweHelioFlags) {
     for (final body in helioBodies) {
@@ -168,8 +169,8 @@ List<CalcSpec> _buildCalcSpecs() {
   }
 
   const sweBaryFlags = [
-    seflgSwieph | seflgSpeed | seflgBaryctr,
-    seflgSwieph | seflgSpeed | seflgBaryctr | seflgEquatorial,
+    seFlgSwiEph | seFlgSpeed | seFlgBaryCtr,
+    seFlgSwiEph | seFlgSpeed | seFlgBaryCtr | seFlgEquatorial,
   ];
   for (final flags in sweBaryFlags) {
     for (final body in baryBodies) {
@@ -178,7 +179,7 @@ List<CalcSpec> _buildCalcSpecs() {
   }
 
   for (final body in sweGeocentricBodies) {
-    specs.add(CalcSpec(seflgSwieph | seflgSpeed | seflgSidereal, body, true));
+    specs.add(CalcSpec(seFlgSwiEph | seFlgSpeed | seFlgSidereal, body, true));
   }
 
   return specs;
@@ -430,9 +431,9 @@ void _runHouseWorkload(
 
     // Subset: housesArmc, housesArmcEx2, housePos
     if (isSubset) {
-      final sunResult = swe.calcUt(jd, seSun, seflgMoseph | seflgSpeed);
+      final sunResult = swe.calcUt(jd, seSun, seFlgMosEph | seFlgSpeed);
       final nutResult = swe.calc(
-        jd + swe.deltat(jd), seEclNut, seflgMoseph,
+        jd + swe.deltat(jd), seEclNut, seFlgMosEph,
       );
       final eps = nutResult.longitude; // true obliquity
 
@@ -473,8 +474,8 @@ void _runAyanamsaWorkload(
       swe.setSidMode(aya);
       swe.getAyanamsaUt(jdUt);    counts.ayanamsa++;
       swe.getAyanamsa(jdEt);      counts.ayanamsa++;
-      swe.getAyanamsaExUt(jdUt, seflgSwieph); counts.ayanamsa++;
-      swe.getAyanamsaEx(jdEt, seflgSwieph);   counts.ayanamsa++;
+      swe.getAyanamsaExUt(jdUt, seFlgSwiEph); counts.ayanamsa++;
+      swe.getAyanamsaEx(jdEt, seFlgSwiEph);   counts.ayanamsa++;
       swe.getAyanamsaName(aya);    counts.ayanamsa++;
     }
 
@@ -482,8 +483,8 @@ void _runAyanamsaWorkload(
       swe.setSidMode(seSidmUser, t0: ud.t0, ayanT0: ud.ayanT0);
       swe.getAyanamsaUt(jdUt);    counts.ayanamsa++;
       swe.getAyanamsa(jdEt);      counts.ayanamsa++;
-      swe.getAyanamsaExUt(jdUt, seflgSwieph); counts.ayanamsa++;
-      swe.getAyanamsaEx(jdEt, seflgSwieph);   counts.ayanamsa++;
+      swe.getAyanamsaExUt(jdUt, seFlgSwiEph); counts.ayanamsa++;
+      swe.getAyanamsaEx(jdEt, seFlgSwiEph);   counts.ayanamsa++;
     }
   }
 }
@@ -531,7 +532,7 @@ void _runDateTimeWorkload(
     swe.deltat(jd);
     counts.dateTime++;
 
-    try { swe.deltatEx(jd, seflgSwieph); counts.dateTime++; }
+    try { swe.deltatEx(jd, seFlgSwiEph); counts.dateTime++; }
     on SweException { counts.dateTime++; counts.expectedErrors++; }
 
     try { swe.timeEqu(jd); counts.dateTime++; }
@@ -572,22 +573,22 @@ void _runPositionExtWorkload(
     final jdEt = jd + swe.deltat(jd);
 
     for (final body in bodies) {
-      try { swe.nodApsUt(jd, body, seflgSwieph | seflgSpeed, seNodbitMean); counts.positionExt++; }
+      try { swe.nodApsUt(jd, body, seFlgSwiEph | seFlgSpeed, seNodBitMean); counts.positionExt++; }
       on SweException { counts.positionExt++; counts.expectedErrors++; }
 
-      try { swe.nodAps(jdEt, body, seflgSwieph | seflgSpeed, seNodbitOscu); counts.positionExt++; }
+      try { swe.nodAps(jdEt, body, seFlgSwiEph | seFlgSpeed, seNodBitOscu); counts.positionExt++; }
       on SweException { counts.positionExt++; counts.expectedErrors++; }
 
-      try { swe.getOrbitalElements(jdEt, body, seflgSwieph); counts.positionExt++; }
+      try { swe.getOrbitalElements(jdEt, body, seFlgSwiEph); counts.positionExt++; }
       on SweException { counts.positionExt++; counts.expectedErrors++; }
 
-      try { swe.orbitMaxMinTrueDistance(jdEt, body, seflgSwieph); counts.positionExt++; }
+      try { swe.orbitMaxMinTrueDistance(jdEt, body, seFlgSwiEph); counts.positionExt++; }
       on SweException { counts.positionExt++; counts.expectedErrors++; }
 
-      try { swe.phenoUt(jd, body, seflgSwieph); counts.positionExt++; }
+      try { swe.phenoUt(jd, body, seFlgSwiEph); counts.positionExt++; }
       on SweException { counts.positionExt++; counts.expectedErrors++; }
 
-      try { swe.pheno(jdEt, body, seflgSwieph); counts.positionExt++; }
+      try { swe.pheno(jdEt, body, seFlgSwiEph); counts.positionExt++; }
       on SweException { counts.positionExt++; counts.expectedErrors++; }
     }
   }
@@ -605,10 +606,10 @@ void _runFixedStarWorkload(
     final jdEt = jd + swe.deltat(jd);
 
     for (final star in fixedStars) {
-      try { swe.fixstar2Ut(star, jd, seflgSwieph | seflgSpeed); counts.fixedStar++; }
+      try { swe.fixstar2Ut(star, jd, seFlgSwiEph | seFlgSpeed); counts.fixedStar++; }
       on SweException { counts.fixedStar++; counts.expectedErrors++; }
 
-      try { swe.fixstar2(star, jdEt, seflgSwieph | seflgSpeed); counts.fixedStar++; }
+      try { swe.fixstar2(star, jdEt, seFlgSwiEph | seFlgSpeed); counts.fixedStar++; }
       on SweException { counts.fixedStar++; counts.expectedErrors++; }
     }
   }
@@ -630,7 +631,7 @@ void _runCoordinateWorkload(
 
     CalcResult sun;
     try {
-      sun = swe.calcUt(jd, seSun, seflgSwieph | seflgSpeed);
+      sun = swe.calcUt(jd, seSun, seFlgSwiEph | seFlgSpeed);
     } on SweException {
       counts.expectedErrors++;
       continue;
@@ -748,25 +749,25 @@ void _runCrossingWorkload(
     final jdEt = jd + swe.deltat(jd);
 
     for (final lon in [0.0, 90.0, 180.0, 270.0]) {
-      try { swe.solCrossUt(lon, jd, seflgSwieph); counts.crossing++; }
+      try { swe.solCrossUt(lon, jd, seFlgSwiEph); counts.crossing++; }
       on SweException { counts.expectedErrors++; }
-      try { swe.solCross(lon, jdEt, seflgSwieph); counts.crossing++; }
+      try { swe.solCross(lon, jdEt, seFlgSwiEph); counts.crossing++; }
       on SweException { counts.expectedErrors++; }
     }
 
-    try { swe.moonCrossUt(0.0, jd, seflgSwieph); counts.crossing++; }
+    try { swe.moonCrossUt(0.0, jd, seFlgSwiEph); counts.crossing++; }
     on SweException { counts.expectedErrors++; }
-    try { swe.moonCross(0.0, jdEt, seflgSwieph); counts.crossing++; }
+    try { swe.moonCross(0.0, jdEt, seFlgSwiEph); counts.crossing++; }
     on SweException { counts.expectedErrors++; }
-    try { swe.moonCrossNodeUt(jd, seflgSwieph); counts.crossing++; }
+    try { swe.moonCrossNodeUt(jd, seFlgSwiEph); counts.crossing++; }
     on SweException { counts.expectedErrors++; }
-    try { swe.moonCrossNode(jdEt, seflgSwieph); counts.crossing++; }
+    try { swe.moonCrossNode(jdEt, seFlgSwiEph); counts.crossing++; }
     on SweException { counts.expectedErrors++; }
 
     if (i % 1000 == 0) {
-      try { swe.helioCrossUt(seMars, 0.0, jd, seflgSwieph, 1); counts.crossing++; }
+      try { swe.helioCrossUt(seMars, 0.0, jd, seFlgSwiEph, 1); counts.crossing++; }
       on SweException { counts.expectedErrors++; }
-      try { swe.helioCross(seMars, 0.0, jdEt, seflgSwieph, 1); counts.crossing++; }
+      try { swe.helioCross(seMars, 0.0, jdEt, seFlgSwiEph, 1); counts.crossing++; }
       on SweException { counts.expectedErrors++; }
     }
   }
@@ -790,7 +791,7 @@ void _runRiseSetWorkload(
         for (final rsmi in [seCalcRise, seCalcSet]) {
           try {
             swe.riseTrans(jd, body,
-                epheflag: seflgSwieph, rsmi: rsmi,
+                epheflag: seFlgSwiEph, rsmi: rsmi,
                 geolon: lon, geolat: lat);
             counts.riseSet++;
           } on SweException { counts.expectedErrors++; }
@@ -802,7 +803,7 @@ void _runRiseSetWorkload(
     for (final rsmi in [seCalcRise, seCalcSet]) {
       try {
         final r = swe.riseTrans(jd, seSun,
-            epheflag: seflgSwieph, rsmi: rsmi,
+            epheflag: seFlgSwiEph, rsmi: rsmi,
             geolon: 25.0, geolat: 70.0);
         counts.riseSet++;
         if (r.returnFlag == -2) counts.expectedErrors++;
@@ -814,7 +815,7 @@ void _runRiseSetWorkload(
       for (final (lat, lon) in nonPolarLocations.take(3)) {
         try {
           swe.riseTransTrueHor(jd, seSun,
-              epheflag: seflgSwieph, rsmi: seCalcRise,
+              epheflag: seFlgSwiEph, rsmi: seCalcRise,
               geolon: lon, geolat: lat, horizonHeight: 0.5);
           counts.riseSet++;
         } on SweException { counts.expectedErrors++; }
@@ -837,15 +838,15 @@ void _runEclipseWorkload(
   var jdSearch = 2451545.0;
   for (int i = 0; i < 10; i++) {
     try {
-      final glob = swe.solEclipseWhenGlob(jdSearch, seflgSwieph);
+      final glob = swe.solEclipseWhenGlob(jdSearch, seFlgSwiEph);
       counts.eclipse++;
       final jdMax = glob.maxEclipse;
 
-      try { swe.solEclipseHow(jdMax, seflgSwieph, geolon: 77.209, geolat: 28.614); counts.eclipse++; }
+      try { swe.solEclipseHow(jdMax, seFlgSwiEph, geolon: 77.209, geolat: 28.614); counts.eclipse++; }
       catch (_) { counts.expectedErrors++; }
-      try { swe.solEclipseWhere(jdMax, seflgSwieph); counts.eclipse++; }
+      try { swe.solEclipseWhere(jdMax, seFlgSwiEph); counts.eclipse++; }
       catch (_) { counts.expectedErrors++; }
-      try { swe.solEclipseWhenLoc(jdSearch, seflgSwieph, geolon: 77.209, geolat: 28.614); counts.eclipse++; }
+      try { swe.solEclipseWhenLoc(jdSearch, seFlgSwiEph, geolon: 77.209, geolat: 28.614); counts.eclipse++; }
       catch (_) { counts.expectedErrors++; }
 
       jdSearch = jdMax + 30;
@@ -856,13 +857,13 @@ void _runEclipseWorkload(
   jdSearch = 2451545.0;
   for (int i = 0; i < 10; i++) {
     try {
-      final glob = swe.lunEclipseWhen(jdSearch, seflgSwieph);
+      final glob = swe.lunEclipseWhen(jdSearch, seFlgSwiEph);
       counts.eclipse++;
       final jdMax = glob.maxEclipse;
 
-      try { swe.lunEclipseHow(jdMax, seflgSwieph, geolon: 77.209, geolat: 28.614); counts.eclipse++; }
+      try { swe.lunEclipseHow(jdMax, seFlgSwiEph, geolon: 77.209, geolat: 28.614); counts.eclipse++; }
       catch (_) { counts.expectedErrors++; }
-      try { swe.lunEclipseWhenLoc(jdSearch, seflgSwieph, geolon: 77.209, geolat: 28.614); counts.eclipse++; }
+      try { swe.lunEclipseWhenLoc(jdSearch, seFlgSwiEph, geolon: 77.209, geolat: 28.614); counts.eclipse++; }
       catch (_) { counts.expectedErrors++; }
 
       jdSearch = jdMax + 30;
@@ -873,13 +874,13 @@ void _runEclipseWorkload(
   jdSearch = 2451545.0;
   for (int i = 0; i < 5; i++) {
     try {
-      final glob = swe.lunOccultWhenGlob(jdSearch, seMars, seflgSwieph);
+      final glob = swe.lunOccultWhenGlob(jdSearch, seMars, seFlgSwiEph);
       counts.eclipse++;
       final jdMax = glob.maxEclipse;
 
-      try { swe.lunOccultWhenLoc(jdSearch, seMars, seflgSwieph, geolon: 77.209, geolat: 28.614); counts.eclipse++; }
+      try { swe.lunOccultWhenLoc(jdSearch, seMars, seFlgSwiEph, geolon: 77.209, geolat: 28.614); counts.eclipse++; }
       catch (_) { counts.expectedErrors++; }
-      try { swe.lunOccultWhere(jdMax, seMars, seflgSwieph); counts.eclipse++; }
+      try { swe.lunOccultWhere(jdMax, seMars, seFlgSwiEph); counts.eclipse++; }
       catch (_) { counts.expectedErrors++; }
 
       jdSearch = jdMax + 30;
@@ -903,21 +904,21 @@ void _runHeliacalWorkload(
       try {
         swe.heliacalUt(jd,
             geolon: 77.209, geolat: 28.614, atmo: atmo, observer: observer,
-            objectName: planet, typeEvent: seHeliacalRising, flags: seflgSwieph);
+            objectName: planet, typeEvent: seHeliacalRising, flags: seFlgSwiEph);
         counts.heliacal++;
       } on SweException { counts.expectedErrors++; }
 
       try {
         swe.heliacalPhenoUt(jd,
             geolon: 77.209, geolat: 28.614, atmo: atmo, observer: observer,
-            objectName: planet, typeEvent: seHeliacalRising, flags: seflgSwieph);
+            objectName: planet, typeEvent: seHeliacalRising, flags: seFlgSwiEph);
         counts.heliacal++;
       } on SweException { counts.expectedErrors++; }
 
       try {
         swe.visLimitMag(jd,
             geolon: 77.209, geolat: 28.614, atmo: atmo, observer: observer,
-            objectName: planet, flags: seflgSwieph);
+            objectName: planet, flags: seFlgSwiEph);
         counts.heliacal++;
       } on SweException { counts.expectedErrors++; }
     }
@@ -939,9 +940,9 @@ void _runGauquelinWorkload(
 
     for (final (lat, lon) in locs) {
       for (final body in bodies) {
-        try { swe.gauquelinSector(jd, body, seflgSwieph, 0, geolon: lon, geolat: lat); counts.gauquelin++; }
+        try { swe.gauquelinSector(jd, body, seFlgSwiEph, 0, geolon: lon, geolat: lat); counts.gauquelin++; }
         on SweException { counts.expectedErrors++; }
-        try { swe.gauquelinSector(jd, body, seflgSwieph, 1, geolon: lon, geolat: lat); counts.gauquelin++; }
+        try { swe.gauquelinSector(jd, body, seFlgSwiEph, 1, geolon: lon, geolat: lat); counts.gauquelin++; }
         on SweException { counts.expectedErrors++; }
       }
     }
@@ -965,14 +966,14 @@ void _isolateWorker(WorkerConfig config) {
     swe.setSidMode(config.assignedAyanamsa);
     final jd2000 = swe.julday(2000, 1, 1, 0.0);
     final ref = swe.calcUt(
-      jd2000, seSun, seflgMoseph | seflgSpeed | seflgSidereal,
+      jd2000, seSun, seFlgMosEph | seFlgSpeed | seFlgSidereal,
     );
     counts.calcUt++;
     final refLon = ref.longitude;
 
     // Second reference: housesEx2 Ascendant at Delhi with assigned ayanamsa
     swe.setSidMode(config.assignedAyanamsa);
-    final hRef = swe.housesEx2(jd2000, seflgSidereal, 28.6139, 77.209, hsysCampanus);
+    final hRef = swe.housesEx2(jd2000, seFlgSidereal, 28.6139, 77.209, hsysCampanus);
     counts.houses++;
     final refAsc = hRef.cusps[1]; // Ascendant
 

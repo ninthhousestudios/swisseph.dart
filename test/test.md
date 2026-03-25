@@ -64,7 +64,7 @@ dart test test/date_test.dart test/calc_test.dart test/ayanamsa_test.dart \
 - Lahiri ayanamsa at J2000: `getAyanamsaUt()` ~23.853 (tolerance 0.01)
 - `getAyanamsaName(seSidmLahiri)` contains "lahiri" (case-insensitive)
 - Sidereal identity: sidereal longitude = (tropical - ayanamsa) mod 360 (tolerance 0.01)
-- `getAyanamsaExUt(jd, seflgMoseph)` returns consistent values across repeated calls, ~23.853
+- `getAyanamsaExUt(jd, seFlgMosEph)` returns consistent values across repeated calls, ~23.853
 
 ### houses_test.dart (4 tests)
 
@@ -134,7 +134,7 @@ Two independent cross-validation suites verify the Dart FFI bindings produce ide
 | getAyanamsaExUt | 4 | `getAyanamsaExUt` with flag parameter | 1e-7 (1e-4 for star-based) |
 | Coverage summary | 1 | validates reference data section counts | exact |
 
-**Key difference from libaditya**: swetest reference uses text parsing which limits precision. The ayanamsa test uses `getAyanamsaExUt(jd, seflgMoseph)` instead of `getAyanamsaUt(jd)` to match swetest's `-emos` (Moshier) mode — these two functions use different internal ephemeris paths and differ by ~0.004 degrees.
+**Key difference from libaditya**: swetest reference uses text parsing which limits precision. The ayanamsa test uses `getAyanamsaExUt(jd, seFlgMosEph)` instead of `getAyanamsaUt(jd)` to match swetest's `-emos` (Moshier) mode — these two functions use different internal ephemeris paths and differ by ~0.004 degrees.
 
 ---
 

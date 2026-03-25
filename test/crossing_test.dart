@@ -16,7 +16,7 @@ void main() {
     test('Sun crosses 0° (vernal equinox) near March 20 2000', () {
       // Start from Jan 1 2000
       final jdStart = swe.julday(2000, 1, 1, 0.0);
-      final jdCross = swe.solCrossUt(0.0, jdStart, seflgMoseph);
+      final jdCross = swe.solCrossUt(0.0, jdStart, seFlgMosEph);
       // Vernal equinox 2000 was around March 20
       final date = swe.revjul(jdCross);
       expect(date.year, equals(2000));
@@ -28,7 +28,7 @@ void main() {
   group('moonCrossUt', () {
     test('Moon crosses 0° Aries starting from a known date', () {
       final jdStart = swe.julday(2000, 1, 1, 0.0);
-      final jdCross = swe.moonCrossUt(0.0, jdStart, seflgMoseph);
+      final jdCross = swe.moonCrossUt(0.0, jdStart, seFlgMosEph);
       // Should find a crossing within ~28 days
       expect(jdCross, greaterThan(jdStart));
       expect(jdCross, lessThan(jdStart + 30));
@@ -38,7 +38,7 @@ void main() {
   group('moonCrossNodeUt', () {
     test('finds next node crossing with longitude near 0° or 180°', () {
       final jdStart = swe.julday(2000, 1, 1, 0.0);
-      final result = swe.moonCrossNodeUt(jdStart, seflgMoseph);
+      final result = swe.moonCrossNodeUt(jdStart, seFlgMosEph);
       // The crossing JD should be after start
       expect(result.jdUt, greaterThan(jdStart));
       // At a node crossing, the Moon's latitude should be near 0°
@@ -60,7 +60,7 @@ void main() {
       final jd = swe.julday(2000, 1, 1, 12.0);
       swe.setSidMode(seSidmLahiri);
       final ayaSimple = swe.getAyanamsa(jd);
-      final ayaEx = swe.getAyanamsaEx(jd, seflgMoseph);
+      final ayaEx = swe.getAyanamsaEx(jd, seFlgMosEph);
       expect(ayaEx.ayanamsa, closeTo(ayaSimple, 0.01));
     });
   });

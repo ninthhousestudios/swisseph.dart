@@ -15,14 +15,14 @@ void main() {
   group('calcUt', () {
     test('Sun position at J2000 (Moshier)', () {
       final jd = swe.julday(2000, 1, 1, 0.0);
-      final result = swe.calcUt(jd, seSun, seflgMoseph | seflgSpeed);
+      final result = swe.calcUt(jd, seSun, seFlgMosEph | seFlgSpeed);
       expect(result.longitude, closeTo(279.858, 0.01));
       expect(result.longitudeSpeed, closeTo(1.019, 0.01));
     });
 
     test('Moon position at J2000 (Moshier)', () {
       final jd = swe.julday(2000, 1, 1, 0.0);
-      final result = swe.calcUt(jd, seMoon, seflgMoseph | seflgSpeed);
+      final result = swe.calcUt(jd, seMoon, seFlgMosEph | seFlgSpeed);
       expect(result.longitude, closeTo(217.284, 0.01));
       expect(result.longitudeSpeed, closeTo(12.103, 0.01));
     });
@@ -32,7 +32,7 @@ void main() {
       for (final body in [
         seSun, seMoon, seMercury, seVenus, seMars, seJupiter, seSaturn
       ]) {
-        final result = swe.calcUt(jd, body, seflgMoseph | seflgSpeed);
+        final result = swe.calcUt(jd, body, seFlgMosEph | seFlgSpeed);
         expect(result.longitude, greaterThanOrEqualTo(0.0));
         expect(result.longitude, lessThan(360.0));
         expect(result.returnFlag, isNonNegative,
@@ -43,7 +43,7 @@ void main() {
     test('returns error string for invalid body', () {
       final jd = swe.julday(2000, 1, 1, 0.0);
       expect(
-        () => swe.calcUt(jd, -2, seflgMoseph),
+        () => swe.calcUt(jd, -2, seFlgMosEph),
         throwsA(isA<SweException>()),
       );
     });

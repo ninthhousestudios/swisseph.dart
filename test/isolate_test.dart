@@ -37,7 +37,7 @@ Future<double> _calcInIsolate(String libPath, int sidMode) async {
       swe.setSidMode(mode);
       final jd = swe.julday(2000, 1, 1, 0.0);
       final result =
-          swe.calcUt(jd, seSun, seflgMoseph | seflgSpeed | seflgSidereal);
+          swe.calcUt(jd, seSun, seFlgMosEph | seFlgSpeed | seFlgSidereal);
       swe.close();
       port.send(result.longitude);
     },

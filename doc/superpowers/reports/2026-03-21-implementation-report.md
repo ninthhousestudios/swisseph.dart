@@ -94,7 +94,7 @@ The plan specified `closeTo(18.5, 1e-10)` for a julday/revjul roundtrip. `swe_re
 
 ### 5. Ayanamsa test adjustment (Task 10)
 
-`getAyanamsaUt` uses Swiss Ephemeris (SE2) data internally (~23.857°) while `getAyanamsaExUt(jd, seflgMoseph)` forces Moshier (~23.853°). They differ by ~0.004° because they use different ephemeris engines for delta-T. Test adjusted to verify internal consistency rather than cross-method equality.
+`getAyanamsaUt` uses Swiss Ephemeris (SE2) data internally (~23.857°) while `getAyanamsaExUt(jd, seFlgMosEph)` forces Moshier (~23.853°). They differ by ~0.004° because they use different ephemeris engines for delta-T. Test adjusted to verify internal consistency rather than cross-method equality.
 
 ---
 

@@ -12,8 +12,8 @@ void main() {
   print('');
 
   // Tropical positions (Moshier — no data files needed)
-  final sun = swe.calcUt(jd, seSun, seflgMoseph | seflgSpeed);
-  final moon = swe.calcUt(jd, seMoon, seflgMoseph | seflgSpeed);
+  final sun = swe.calcUt(jd, seSun, seFlgMosEph | seFlgSpeed);
+  final moon = swe.calcUt(jd, seMoon, seFlgMosEph | seFlgSpeed);
   print('Tropical positions:');
   print('  ${swe.getPlanetName(seSun)}: ${sun.longitude.toStringAsFixed(4)}°'
       ' (speed: ${sun.longitudeSpeed.toStringAsFixed(4)}°/day)');
@@ -24,7 +24,7 @@ void main() {
   // Sidereal (Lahiri) positions
   swe.setSidMode(seSidmLahiri);
   final aya = swe.getAyanamsaUt(jd);
-  final sidSun = swe.calcUt(jd, seSun, seflgMoseph | seflgSpeed | seflgSidereal);
+  final sidSun = swe.calcUt(jd, seSun, seFlgMosEph | seFlgSpeed | seFlgSidereal);
   print('Lahiri ayanamsa: ${aya.toStringAsFixed(4)}°');
   print('Sidereal Sun: ${sidSun.longitude.toStringAsFixed(4)}°');
   print('');

@@ -23,7 +23,7 @@ import 'constants.dart';
 /// final swe = SwissEph.find();
 /// swe.setEphePath('/path/to/ephe');
 /// final jd = swe.julday(2000, 1, 1, 12.0);
-/// final result = swe.calcUt(jd, seSun, seflgSwieph | seflgSpeed);
+/// final result = swe.calcUt(jd, seSun, seFlgSwiEph | seFlgSpeed);
 /// print(result.longitude);
 /// swe.close();
 /// ```
@@ -969,7 +969,7 @@ class SwissEph {
   /// Find the next solar eclipse visible from a given location.
   ///
   /// [jdStart] is the Julian Day to start searching from.
-  /// [flags] are ephemeris flags (e.g. seflgMoseph).
+  /// [flags] are ephemeris flags (e.g. seFlgMosEph).
   /// Returns timing and attributes of the eclipse at the given location.
   SolarEclipseLocalResult solEclipseWhenLoc(double jdStart, int flags,
       {required double geolon, required double geolat, double geoalt = 0,
@@ -1285,7 +1285,7 @@ class SwissEph {
   RiseTransResult riseTrans(
     double jdUt,
     int body, {
-    int epheflag = seflgMoseph,
+    int epheflag = seFlgMosEph,
     int rsmi = seCalcRise,
     required double geolon,
     required double geolat,
@@ -1445,7 +1445,7 @@ class SwissEph {
 
   /// Compute Delta T with explicit ephemeris flag.
   ///
-  /// [flags] selects the ephemeris (e.g. [seflgSwieph], [seflgMoseph]).
+  /// [flags] selects the ephemeris (e.g. [seFlgSwiEph], [seFlgMosEph]).
   /// Returns Delta T in days.
   double deltatEx(double jd, int flags) {
     final serr = pkg_ffi.calloc<ffi.Char>(256);
@@ -1619,7 +1619,7 @@ class SwissEph {
 
   /// Compute planetary nodes and apsides (UT).
   ///
-  /// [body] — planet ID, [flags] — calc flags, [method] — seNodbit* constant.
+  /// [body] — planet ID, [flags] — calc flags, [method] — seNodBit* constant.
   /// Returns ascending/descending nodes and perihelion/aphelion.
   NodeApsResult nodApsUt(double jdUt, int body, int flags, int method) {
     final xnasc = pkg_ffi.calloc<ffi.Double>(6);
@@ -1959,7 +1959,7 @@ class SwissEph {
   RiseTransResult riseTransTrueHor(
     double jdUt,
     int body, {
-    int epheflag = seflgMoseph,
+    int epheflag = seFlgMosEph,
     int rsmi = seCalcRise,
     required double geolon,
     required double geolat,

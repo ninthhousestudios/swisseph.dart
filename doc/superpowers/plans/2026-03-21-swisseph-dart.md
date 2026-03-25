@@ -313,51 +313,51 @@ git commit -m "build: add native asset hook to compile Swiss Ephemeris C source"
 // --- Ephemeris selection ---
 
 /// Swiss Ephemeris data files (highest precision)
-const int seflgSwieph = 2;
+const int seFlgSwiEph = 2;
 
 /// Moshier analytical ephemeris (no files needed, ~1" accuracy)
-const int seflgMoseph = 4;
+const int seFlgMosEph = 4;
 
 /// JPL ephemeris files
-const int seflgJpleph = 1;
+const int seFlgJplEph = 1;
 
 // --- Calculation flags ---
 
 /// Include speed in output
-const int seflgSpeed = 256;
+const int seFlgSpeed = 256;
 
 /// Heliocentric positions
-const int seflgHelctr = 8;
+const int seFlgHelCtr = 8;
 
 /// True position (no aberration/deflection)
-const int seflgTruepos = 16;
+const int seFlgTruePos = 16;
 
 /// Equatorial coordinates (RA/dec instead of lon/lat)
-const int seflgEquatorial = 2048;
+const int seFlgEquatorial = 2048;
 
 /// Topocentric (requires swe_set_topo)
-const int seflgTopoctr = 32768;
+const int seFlgTopoCtr = 32768;
 
 /// Sidereal zodiac (requires swe_set_sid_mode)
-const int seflgSidereal = 65536;
+const int seFlgSidereal = 65536;
 
 /// No aberration correction
-const int seflgNoaberr = 1024;
+const int seFlgNoAberr = 1024;
 
 /// No gravitational deflection
-const int seflgNogdefl = 512;
+const int seFlgNoGdefl = 512;
 
 /// Cartesian (XYZ) instead of polar
-const int seflgXyz = 4096;
+const int seFlgXyz = 4096;
 
 /// Radians instead of degrees
-const int seflgRadians = 8192;
+const int seFlgRadians = 8192;
 
 /// Barycentric
-const int seflgBaryctr = 16384;
+const int seFlgBaryCtr = 16384;
 
 /// ICRS reference frame
-const int seflgIcrs = 131072;
+const int seFlgIcrs = 131072;
 
 // --- Body IDs ---
 
@@ -501,8 +501,8 @@ const int seSidmUser = 255;
 
 const int seCalcRise = 1;
 const int seCalcSet = 2;
-const int seCalcMtransit = 4;
-const int seCalcItransit = 8;
+const int seCalcMTransit = 4;
+const int seCalcITransit = 8;
 const int seBitDiscCenter = 256;
 const int seBitDiscBottom = 8192;
 const int seBitNoRefraction = 512;
@@ -888,7 +888,7 @@ import 'constants.dart';
 /// final swe = SwissEph.find();
 /// swe.setEphePath('/path/to/ephe');
 /// final jd = swe.julday(2000, 1, 1, 12.0);
-/// final result = swe.calcUt(jd, seSun, seflgSwieph | seflgSpeed);
+/// final result = swe.calcUt(jd, seSun, seFlgSwiEph | seFlgSpeed);
 /// print(result.longitude);
 /// swe.close();
 /// ```
@@ -1059,7 +1059,7 @@ Add to `lib/src/swiss_eph.dart` after the `revjul` method:
   /// [sidMode] is one of the SE_SIDM_* constants (e.g. [seSidmLahiri]).
   /// [t0] and [ayanT0] are only used with [seSidmUser] for custom ayanamsa.
   ///
-  /// After calling this, use [seflgSidereal] flag in [calcUt] for sidereal positions,
+  /// After calling this, use [seFlgSidereal] flag in [calcUt] for sidereal positions,
   /// or call [getAyanamsaUt] to get the ayanamsa value.
   void setSidMode(int sidMode, {double t0 = 0, double ayanT0 = 0}) {
     _bind.swe_set_sid_mode(sidMode, t0, ayanT0);
@@ -1071,7 +1071,7 @@ Add to `lib/src/swiss_eph.dart` after the `revjul` method:
   /// [geolat] geographic latitude in degrees (north positive).
   /// [geoalt] altitude above sea level in meters.
   ///
-  /// After calling this, use [seflgTopoctr] flag in [calcUt].
+  /// After calling this, use [seFlgTopoCtr] flag in [calcUt].
   void setTopo(double geolon, double geolat, double geoalt) {
     _bind.swe_set_topo(geolon, geolat, geoalt);
   }
@@ -1121,7 +1121,7 @@ void main() {
     test('Sun position at J2000 (Moshier)', () {
       // 2000-01-01 00:00 UT
       final jd = swe.julday(2000, 1, 1, 0.0);
-      final result = swe.calcUt(jd, seSun, seflgMoseph | seflgSpeed);
+      final result = swe.calcUt(jd, seSun, seFlgMosEph | seFlgSpeed);
 
       // Moshier values (from swetest without -edir):
       // Sun 279.8584626, speed 1.0193448
@@ -1131,7 +1131,7 @@ void main() {
 
     test('Moon position at J2000 (Moshier)', () {
       final jd = swe.julday(2000, 1, 1, 0.0);
-      final result = swe.calcUt(jd, seMoon, seflgMoseph | seflgSpeed);
+      final result = swe.calcUt(jd, seMoon, seFlgMosEph | seFlgSpeed);
 
       // Moon 217.2844253, speed 12.1030939
       expect(result.longitude, closeTo(217.284, 0.01));
@@ -1143,7 +1143,7 @@ void main() {
       for (final body in [
         seSun, seMoon, seMercury, seVenus, seMars, seJupiter, seSaturn
       ]) {
-        final result = swe.calcUt(jd, body, seflgMoseph | seflgSpeed);
+        final result = swe.calcUt(jd, body, seFlgMosEph | seFlgSpeed);
         expect(result.longitude, greaterThanOrEqualTo(0.0));
         expect(result.longitude, lessThan(360.0));
         expect(result.returnFlag, isNonNegative,
@@ -1155,7 +1155,7 @@ void main() {
       final jd = swe.julday(2000, 1, 1, 0.0);
       // Body -2 is invalid
       expect(
-        () => swe.calcUt(jd, -2, seflgMoseph),
+        () => swe.calcUt(jd, -2, seFlgMosEph),
         throwsA(isA<SweException>()),
       );
     });
@@ -1199,7 +1199,7 @@ Add to `lib/src/swiss_eph.dart`:
   ///
   /// [jdUt] Julian Day in Universal Time.
   /// [body] one of the SE body constants (e.g. [seSun], [seMoon]).
-  /// [flags] combination of SEFLG_* flags (e.g. `seflgSwieph | seflgSpeed`).
+  /// [flags] combination of SEFLG_* flags (e.g. `seFlgSwiEph | seFlgSpeed`).
   ///
   /// Returns a [CalcResult] with longitude, latitude, distance, and speeds.
   /// Throws [SweException] if the calculation fails (negative return flag).
@@ -1418,11 +1418,11 @@ void main() {
       final jd = swe.julday(2000, 1, 1, 0.0);
 
       // Get tropical Sun
-      final tropical = swe.calcUt(jd, seSun, seflgMoseph | seflgSpeed);
+      final tropical = swe.calcUt(jd, seSun, seFlgMosEph | seFlgSpeed);
 
       // Get sidereal Sun
       final sidereal = swe.calcUt(
-          jd, seSun, seflgMoseph | seflgSpeed | seflgSidereal);
+          jd, seSun, seFlgMosEph | seFlgSpeed | seFlgSidereal);
 
       // Get ayanamsa
       final aya = swe.getAyanamsaUt(jd);
@@ -1437,7 +1437,7 @@ void main() {
       final jd = swe.julday(2000, 1, 1, 0.0);
 
       final simple = swe.getAyanamsaUt(jd);
-      final extended = swe.getAyanamsaExUt(jd, seflgMoseph);
+      final extended = swe.getAyanamsaExUt(jd, seFlgMosEph);
 
       expect(extended.ayanamsa, closeTo(simple, 0.0001));
     });
@@ -1627,7 +1627,7 @@ Add to `lib/src/swiss_eph.dart`:
   ///
   /// [jdUt] starting Julian Day (UT).
   /// [body] celestial body (SE body constant).
-  /// [epheflag] ephemeris flags (e.g. [seflgSwieph]).
+  /// [epheflag] ephemeris flags (e.g. [seFlgSwiEph]).
   /// [rsmi] rise/set/transit flag (e.g. [seCalcRise], [seCalcSet]).
   /// [geolon], [geolat], [geoalt] observer position.
   /// [atpress] atmospheric pressure in mbar (default 1013.25 for standard, 0 for no refraction).
@@ -1638,7 +1638,7 @@ Add to `lib/src/swiss_eph.dart`:
   RiseTransResult riseTrans(
     double jdUt,
     int body, {
-    int epheflag = seflgMoseph,
+    int epheflag = seFlgMosEph,
     int rsmi = seCalcRise,
     required double geolon,
     required double geolat,
@@ -1764,7 +1764,7 @@ Future<double> _calcInIsolate(String libPath, int sidMode) async {
       swe.setSidMode(mode);
       final jd = swe.julday(2000, 1, 1, 0.0);
       final result =
-          swe.calcUt(jd, seSun, seflgMoseph | seflgSpeed | seflgSidereal);
+          swe.calcUt(jd, seSun, seFlgMosEph | seFlgSpeed | seFlgSidereal);
       swe.close();
       port.send(result.longitude);
     },
@@ -1874,8 +1874,8 @@ void main() {
   print('');
 
   // Tropical positions
-  final sun = swe.calcUt(jd, seSun, seflgSwieph | seflgSpeed);
-  final moon = swe.calcUt(jd, seMoon, seflgSwieph | seflgSpeed);
+  final sun = swe.calcUt(jd, seSun, seFlgSwiEph | seFlgSpeed);
+  final moon = swe.calcUt(jd, seMoon, seFlgSwiEph | seFlgSpeed);
   print('Tropical positions:');
   print('  ${swe.getPlanetName(seSun)}: ${sun.longitude.toStringAsFixed(4)}°'
       ' (speed: ${sun.longitudeSpeed.toStringAsFixed(4)}°/day)');
@@ -1886,7 +1886,7 @@ void main() {
   // Sidereal (Lahiri) positions
   swe.setSidMode(seSidmLahiri);
   final aya = swe.getAyanamsaUt(jd);
-  final sidSun = swe.calcUt(jd, seSun, seflgSwieph | seflgSpeed | seflgSidereal);
+  final sidSun = swe.calcUt(jd, seSun, seFlgSwiEph | seFlgSpeed | seFlgSidereal);
   print('Lahiri ayanamsa: ${aya.toStringAsFixed(4)}°');
   print('Sidereal Sun: ${sidSun.longitude.toStringAsFixed(4)}°');
   print('');

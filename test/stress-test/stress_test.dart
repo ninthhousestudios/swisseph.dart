@@ -1,3 +1,4 @@
+@Tags(['stress'])
 @Timeout(Duration(minutes: 120))
 library;
 
@@ -97,11 +98,11 @@ List<CalcSpec> _buildCalcSpecs() {
   // --- Moshier modes ---
 
   const moshierGeoFlags = [
-    seflgMoseph | seflgSpeed,
-    seflgMoseph | seflgSpeed | seflgEquatorial,
-    seflgMoseph | seflgSpeed | seflgTruepos,
-    seflgMoseph | seflgSpeed | seflgNoaberr,
-    seflgMoseph | seflgSpeed | seflgNogdefl,
+    seFlgMosEph | seFlgSpeed,
+    seFlgMosEph | seFlgSpeed | seFlgEquatorial,
+    seFlgMosEph | seFlgSpeed | seFlgTruePos,
+    seFlgMosEph | seFlgSpeed | seFlgNoAberr,
+    seFlgMosEph | seFlgSpeed | seFlgNoGdefl,
   ];
   for (final flags in moshierGeoFlags) {
     for (final body in moshierGeocentricBodies) {
@@ -111,8 +112,8 @@ List<CalcSpec> _buildCalcSpecs() {
 
   // Moshier heliocentric
   const moshierHelioFlags = [
-    seflgMoseph | seflgSpeed | seflgHelctr,
-    seflgMoseph | seflgSpeed | seflgHelctr | seflgEquatorial,
+    seFlgMosEph | seFlgSpeed | seFlgHelCtr,
+    seFlgMosEph | seFlgSpeed | seFlgHelCtr | seFlgEquatorial,
   ];
   for (final flags in moshierHelioFlags) {
     for (final body in helioBodies) {
@@ -123,17 +124,17 @@ List<CalcSpec> _buildCalcSpecs() {
 
   // Moshier sidereal (ayanamsa cycling in worker)
   for (final body in moshierGeocentricBodies) {
-    specs.add(CalcSpec(seflgMoseph | seflgSpeed | seflgSidereal, body, true));
+    specs.add(CalcSpec(seFlgMosEph | seFlgSpeed | seFlgSidereal, body, true));
   }
 
   // --- Swiss Ephemeris file modes ---
 
   const sweGeoFlags = [
-    seflgSwieph | seflgSpeed,
-    seflgSwieph | seflgSpeed | seflgEquatorial,
-    seflgSwieph | seflgSpeed | seflgTruepos,
-    seflgSwieph | seflgSpeed | seflgNoaberr,
-    seflgSwieph | seflgSpeed | seflgNogdefl,
+    seFlgSwiEph | seFlgSpeed,
+    seFlgSwiEph | seFlgSpeed | seFlgEquatorial,
+    seFlgSwiEph | seFlgSpeed | seFlgTruePos,
+    seFlgSwiEph | seFlgSpeed | seFlgNoAberr,
+    seFlgSwiEph | seFlgSpeed | seFlgNoGdefl,
   ];
   for (final flags in sweGeoFlags) {
     for (final body in sweGeocentricBodies) {
@@ -143,8 +144,8 @@ List<CalcSpec> _buildCalcSpecs() {
 
   // SwissEph heliocentric
   const sweHelioFlags = [
-    seflgSwieph | seflgSpeed | seflgHelctr,
-    seflgSwieph | seflgSpeed | seflgHelctr | seflgEquatorial,
+    seFlgSwiEph | seFlgSpeed | seFlgHelCtr,
+    seFlgSwiEph | seFlgSpeed | seFlgHelCtr | seFlgEquatorial,
   ];
   for (final flags in sweHelioFlags) {
     for (final body in helioBodies) {
@@ -154,8 +155,8 @@ List<CalcSpec> _buildCalcSpecs() {
 
   // SwissEph barycentric
   const sweBaryFlags = [
-    seflgSwieph | seflgSpeed | seflgBaryctr,
-    seflgSwieph | seflgSpeed | seflgBaryctr | seflgEquatorial,
+    seFlgSwiEph | seFlgSpeed | seFlgBaryCtr,
+    seFlgSwiEph | seFlgSpeed | seFlgBaryCtr | seFlgEquatorial,
   ];
   for (final flags in sweBaryFlags) {
     for (final body in baryBodies) {
@@ -165,7 +166,7 @@ List<CalcSpec> _buildCalcSpecs() {
 
   // SwissEph sidereal (ayanamsa cycling in worker)
   for (final body in sweGeocentricBodies) {
-    specs.add(CalcSpec(seflgSwieph | seflgSpeed | seflgSidereal, body, true));
+    specs.add(CalcSpec(seFlgSwiEph | seFlgSpeed | seFlgSidereal, body, true));
   }
 
   return specs;
@@ -241,7 +242,7 @@ void _isolateWorker(WorkerConfig config) {
     swe.setSidMode(config.assignedAyanamsa);
     final jd2000 = swe.julday(2000, 1, 1, 0.0);
     final ref = swe.calcUt(
-      jd2000, seSun, seflgMoseph | seflgSpeed | seflgSidereal,
+      jd2000, seSun, seFlgMosEph | seFlgSpeed | seFlgSidereal,
     );
     calcCount++;
     final refLon = ref.longitude;

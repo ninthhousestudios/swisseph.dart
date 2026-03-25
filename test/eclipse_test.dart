@@ -15,7 +15,7 @@ void main() {
   group('Solar eclipses', () {
     test('solEclipseWhenGlob finds April 8 2024 total solar eclipse', () {
       final jdStart = swe.julday(2024, 1, 1, 0.0);
-      final result = swe.solEclipseWhenGlob(jdStart, seflgMoseph);
+      final result = swe.solEclipseWhenGlob(jdStart, seFlgMosEph);
 
       // The next solar eclipse after Jan 1 2024 is April 8 2024 (total)
       final date = swe.revjul(result.maxEclipse);
@@ -33,7 +33,7 @@ void main() {
 
     test('solEclipseWhenLoc from Dallas TX', () {
       final jdStart = swe.julday(2024, 1, 1, 0.0);
-      final result = swe.solEclipseWhenLoc(jdStart, seflgMoseph,
+      final result = swe.solEclipseWhenLoc(jdStart, seFlgMosEph,
           geolon: -96.80, geolat: 32.78);
 
       // Should find the April 8 2024 eclipse
@@ -59,10 +59,10 @@ void main() {
 
     test('solEclipseHow at time/location from Dallas', () {
       final jdStart = swe.julday(2024, 1, 1, 0.0);
-      final local = swe.solEclipseWhenLoc(jdStart, seflgMoseph,
+      final local = swe.solEclipseWhenLoc(jdStart, seFlgMosEph,
           geolon: -96.80, geolat: 32.78);
 
-      final result = swe.solEclipseHow(local.maxEclipse, seflgMoseph,
+      final result = swe.solEclipseHow(local.maxEclipse, seFlgMosEph,
           geolon: -96.80, geolat: 32.78);
 
       // Magnitude should be positive
@@ -76,10 +76,10 @@ void main() {
     test('solEclipseWhere finds central line in reasonable location', () {
       // First find the eclipse time
       final jdStart = swe.julday(2024, 1, 1, 0.0);
-      final glob = swe.solEclipseWhenGlob(jdStart, seflgMoseph);
+      final glob = swe.solEclipseWhenGlob(jdStart, seFlgMosEph);
 
       // Get the central line location at maximum eclipse
-      final result = swe.solEclipseWhere(glob.maxEclipse, seflgMoseph);
+      final result = swe.solEclipseWhere(glob.maxEclipse, seFlgMosEph);
 
       // The April 8 2024 eclipse path crosses North America
       // Latitude should be roughly 15-50N, longitude roughly -120 to -40W
@@ -96,7 +96,7 @@ void main() {
   group('Lunar eclipses', () {
     test('lunEclipseWhen finds March 25 2024 penumbral lunar eclipse', () {
       final jdStart = swe.julday(2024, 1, 1, 0.0);
-      final result = swe.lunEclipseWhen(jdStart, seflgMoseph);
+      final result = swe.lunEclipseWhen(jdStart, seFlgMosEph);
 
       final date = swe.revjul(result.maxEclipse);
       expect(date.year, equals(2024));
@@ -113,10 +113,10 @@ void main() {
 
     test('lunEclipseHow for March 25 2024 eclipse', () {
       final jdStart = swe.julday(2024, 1, 1, 0.0);
-      final when = swe.lunEclipseWhen(jdStart, seflgMoseph);
+      final when = swe.lunEclipseWhen(jdStart, seFlgMosEph);
 
       // Get attributes from a location that can see it (e.g. London)
-      final result = swe.lunEclipseHow(when.maxEclipse, seflgMoseph,
+      final result = swe.lunEclipseHow(when.maxEclipse, seFlgMosEph,
           geolon: -0.12, geolat: 51.51);
 
       // For a penumbral eclipse, penumbral magnitude should be positive

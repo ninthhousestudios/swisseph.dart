@@ -14,7 +14,7 @@ bindings, covering nearly the full Swiss Ephemeris API surface.
 │  Dart application code                               │
 │    import 'package:swisseph/swisseph.dart';          │
 │    final swe = SwissEph.find();                      │
-│    swe.calcUt(jd, seSun, seflgMoseph);               │
+│    swe.calcUt(jd, seSun, seFlgMosEph);               │
 └───────────────────┬──────────────────────────────────┘
                     │
 ┌───────────────────▼──────────────────────────────────┐
@@ -371,7 +371,7 @@ C API's integer flags (combined with bitwise OR).
 
 **Naming convention:** Dart lowerCamelCase derived from the C macro name:
 - `SE_SUN` → `seSun`
-- `SEFLG_SPEED` → `seflgSpeed`
+- `SEFLG_SPEED` → `seFlgSpeed`
 - `SE_SIDM_LAHIRI` → `seSidmLahiri`
 - House systems are ASCII codes: `hsysCampanus = 0x43` (`'C'`)
 
@@ -380,14 +380,14 @@ C API's integer flags (combined with bitwise OR).
 | Group | Prefix | Count | Examples |
 |-------|--------|------:|---------|
 | Body IDs | `se` | 23 | `seSun`, `seMoon`, `seChiron`, `seCupido` |
-| Calc flags | `seflg` / `seFlg` | 20 | `seflgSpeed`, `seflgSidereal`, `seFlgJ2000` |
+| Calc flags | `seFlg` | 20 | `seFlgSpeed`, `seFlgSidereal`, `seFlgJ2000` |
 | House systems | `hsys` | 14 | `hsysPlacidus`, `hsysGauquelin` |
 | Ayanamsa modes | `seSidm` | 48 | `seSidmLahiri`, `seSidmUser` |
 | Rise/set | `seCalc` / `seBit` | 12 | `seCalcRise`, `seBitDiscCenter` |
 | Eclipse types | `seEcl` | 16 | `seEclTotal`, `seEclPartial`, `seEclOneTry` |
-| Node/apsides | `seNodbit` | 4 | `seNodbitMean`, `seNodbitOscu` |
-| Heliacal | `seHeliacal` / `seHelflag` / `seMorning` / `seEvening` | 8 | `seHeliacalRising`, `seHelflagHighPrecision` |
-| Sidereal bits | `seSidbit` | 6 | `seSidbitEclT0`, `seSidbitPrecOrig` |
+| Node/apsides | `seNodBit` | 4 | `seNodBitMean`, `seNodBitOscu` |
+| Heliacal | `seHeliacal` / `seHelFlag` / `seMorning` / `seEvening` | 8 | `seHeliacalRising`, `seHelFlagHighPrecision` |
+| Sidereal bits | `seSidBit` | 6 | `seSidBitEclT0`, `seSidBitPrecOrig` |
 | Split degree | `seSplitDeg` | 7 | `seSplitDegRoundSec`, `seSplitDegNakshatra` |
 | Refraction | `seTrueToApp` / `seAppToTrue` | 2 | Direction flags for `refrac` |
 | Az/alt | `seEcl2hor` / `seEqu2hor` | 4 | Coordinate system selection (not direction) |
@@ -452,9 +452,9 @@ The `ephe/` directory contains Swiss Ephemeris data files covering
 
 | Mode | Flag | Files needed | Accuracy |
 |------|------|-------------|----------|
-| Moshier | `seflgMoseph` | None | ~1 arcsecond |
-| Swiss Ephemeris | `seflgSwieph` | `.se1` files via `setEphePath()` | Sub-arcsecond |
-| JPL | `seflgJpleph` | JPL ephemeris files | Highest |
+| Moshier | `seFlgMosEph` | None | ~1 arcsecond |
+| Swiss Ephemeris | `seFlgSwiEph` | `.se1` files via `setEphePath()` | Sub-arcsecond |
+| JPL | `seFlgJplEph` | JPL ephemeris files | Highest |
 
 All tests use Moshier mode so they run without external data files.
 
@@ -538,7 +538,7 @@ shared-state reality explicit.
 
 The C API uses integer flags combined with bitwise OR. Dart enums can't
 participate in bitwise operations without boilerplate. Integer constants
-map 1:1 to C values and combine naturally: `seflgMoseph | seflgSpeed | seflgSidereal`.
+map 1:1 to C values and combine naturally: `seFlgMosEph | seFlgSpeed | seFlgSidereal`.
 
 ### Why calloc + try/finally, not Arena?
 

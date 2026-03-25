@@ -3,51 +3,51 @@
 // --- Ephemeris selection ---
 
 /// Swiss Ephemeris data files (highest precision)
-const int seflgSwieph = 2;
+const int seFlgSwiEph = 2;
 
 /// Moshier analytical ephemeris (no files needed, ~1" accuracy)
-const int seflgMoseph = 4;
+const int seFlgMosEph = 4;
 
 /// JPL ephemeris files
-const int seflgJpleph = 1;
+const int seFlgJplEph = 1;
 
 // --- Calculation flags ---
 
 /// Include speed in output
-const int seflgSpeed = 256;
+const int seFlgSpeed = 256;
 
 /// Heliocentric positions
-const int seflgHelctr = 8;
+const int seFlgHelCtr = 8;
 
 /// True position (no aberration/deflection)
-const int seflgTruepos = 16;
+const int seFlgTruePos = 16;
 
 /// Equatorial coordinates (RA/dec instead of lon/lat)
-const int seflgEquatorial = 2048;
+const int seFlgEquatorial = 2048;
 
 /// Topocentric (requires swe_set_topo)
-const int seflgTopoctr = 32768;
+const int seFlgTopoCtr = 32768;
 
 /// Sidereal zodiac (requires swe_set_sid_mode)
-const int seflgSidereal = 65536;
+const int seFlgSidereal = 65536;
 
 /// No aberration correction
-const int seflgNoaberr = 1024;
+const int seFlgNoAberr = 1024;
 
 /// No gravitational deflection
-const int seflgNogdefl = 512;
+const int seFlgNoGdefl = 512;
 
 /// Cartesian (XYZ) instead of polar
-const int seflgXyz = 4096;
+const int seFlgXyz = 4096;
 
 /// Radians instead of degrees
-const int seflgRadians = 8192;
+const int seFlgRadians = 8192;
 
 /// Barycentric
-const int seflgBaryctr = 16384;
+const int seFlgBaryCtr = 16384;
 
 /// ICRS reference frame
-const int seflgIcrs = 131072;
+const int seFlgIcrs = 131072;
 
 // --- Body IDs ---
 
@@ -194,13 +194,13 @@ const int seSidmUser = 255;
 
 const int seCalcRise = 1;
 const int seCalcSet = 2;
-const int seCalcMtransit = 4;
-const int seCalcItransit = 8;
+const int seCalcMTransit = 4;
+const int seCalcITransit = 8;
 const int seBitDiscCenter = 256;
 const int seBitDiscBottom = 8192;
 const int seBitNoRefraction = 512;
 const int seBitHinduRising = 896; // disc center + no refraction + geocentric no ecl lat
-const int seBitGeoctrNoEclLat = 128;
+const int seBitGeoCtrNoEclLat = 128;
 const int seBitCivilTwilight = 1024;
 const int seBitNauticTwilight = 2048;
 const int seBitAstroTwilight = 4096;
@@ -209,16 +209,16 @@ const int seBitFixedDiscSize = 16384;
 // --- Node/apsides method flags ---
 
 /// Mean nodes/apsides
-const int seNodbitMean = 1;
+const int seNodBitMean = 1;
 
 /// Osculating nodes/apsides
-const int seNodbitOscu = 2;
+const int seNodBitOscu = 2;
 
 /// Osculating, motion about solar system barycenter
-const int seNodbitOscuBar = 4;
+const int seNodBitOscuBar = 4;
 
 /// Focal point of orbit instead of aphelion
-const int seNodbitFopoint = 256;
+const int seNodBitFoPoint = 256;
 
 // --- Heliacal event types ---
 
@@ -242,30 +242,30 @@ const int seMorningLast = 4;
 
 // --- Heliacal flags ---
 
-const int seHelflagLongSearch = 128;
-const int seHelflagHighPrecision = 256;
-const int seHelflagOpticalParams = 512;
-const int seHelflagNoDetails = 1024;
+const int seHelFlagLongSearch = 128;
+const int seHelFlagHighPrecision = 256;
+const int seHelFlagOpticalParams = 512;
+const int seHelFlagNoDetails = 1024;
 
 // --- Sidereal mode bits ---
 
 /// Project onto ecliptic of t0
-const int seSidbitEclT0 = 256;
+const int seSidBitEclT0 = 256;
 
 /// Project onto solar system plane
-const int seSidbitSsyPlane = 512;
+const int seSidBitSsyPlane = 512;
 
 /// User-defined UT
-const int seSidbitUserUt = 1024;
+const int seSidBitUserUt = 1024;
 
 /// Project onto ecliptic of date
-const int seSidbitEclDate = 2048;
+const int seSidBitEclDate = 2048;
 
 /// No precession offset
-const int seSidbitNoPrecOffset = 4096;
+const int seSidBitNoPrecOffset = 4096;
 
 /// Original precession
-const int seSidbitPrecOrig = 8192;
+const int seSidBitPrecOrig = 8192;
 
 // --- Special body IDs ---
 
@@ -326,7 +326,7 @@ const int seSplitDegNakshatra = 1024;
 // --- Eclipse type flags ---
 
 const int seEclCentral = 1;
-const int seEclNoncentral = 2;
+const int seEclNonCentral = 2;
 const int seEclTotal = 4;
 const int seEclAnnular = 8;
 const int seEclPartial = 16;
@@ -334,10 +334,10 @@ const int seEclHybrid = 32; // annular-total
 const int seEclPenumbral = 64;
 const int seEclVisible = 128;
 const int seEclMaxVisible = 256;
-const int seEclPartbegVisible = 512;
-const int seEclTotbegVisible = 1024;
-const int seEclTotendVisible = 2048;
-const int seEclPartendVisible = 4096;
-const int seEclPenumbbegVisible = 8192;
-const int seEclPenumbendVisible = 16384;
+const int seEclPartBegVisible = 512;
+const int seEclTotBegVisible = 1024;
+const int seEclTotEndVisible = 2048;
+const int seEclPartEndVisible = 4096;
+const int seEclPenumbBegVisible = 8192;
+const int seEclPenumbEndVisible = 16384;
 const int seEclOneTry = 32768;

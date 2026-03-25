@@ -82,13 +82,13 @@ void main() {
   final jd = swe.julday(2000, 1, 1, 12.0);
 
   // Sun position (Moshier — no data files needed)
-  final sun = swe.calcUt(jd, seSun, seflgMoseph | seflgSpeed);
+  final sun = swe.calcUt(jd, seSun, seFlgMosEph | seFlgSpeed);
   print('Sun: ${sun.longitude}°');
 
   // Sidereal position (Lahiri)
   swe.setSidMode(seSidmLahiri);
   final sidSun = swe.calcUt(
-    jd, seSun, seflgMoseph | seflgSpeed | seflgSidereal,
+    jd, seSun, seFlgMosEph | seFlgSpeed | seFlgSidereal,
   );
   print('Sidereal Sun: ${sidSun.longitude}°');
 
@@ -106,13 +106,13 @@ void main() {
 
   // Next solar eclipse visible from Washington DC
   final eclipse = swe.solEclipseWhenLoc(
-    jd, seflgSwieph,
+    jd, seFlgSwiEph,
     geolon: -77.0365, geolat: 38.8977,
   );
   print('Next solar eclipse: JD ${eclipse.maxEclipse}');
 
   // Next Sun crossing of 0° Aries
-  final cross = swe.solCrossUt(0.0, jd, seflgSwieph);
+  final cross = swe.solCrossUt(0.0, jd, seFlgSwiEph);
   print('Next vernal equinox: JD $cross');
 
   swe.close();
@@ -150,9 +150,9 @@ All native memory uses `calloc` + `try/finally free`. Errors throw
 
 | Mode            | Flag           | Files needed        | Accuracy       |
 |-----------------|----------------|---------------------|----------------|
-| Moshier         | `seflgMoseph`  | None                | ~1 arcsecond   |
-| Swiss Ephemeris | `seflgSwieph`  | `.se1` data files   | Sub-arcsecond  |
-| JPL             | `seflgJpleph`  | JPL ephemeris files | Highest        |
+| Moshier         | `seFlgMosEph`  | None                | ~1 arcsecond   |
+| Swiss Ephemeris | `seFlgSwiEph`  | `.se1` data files   | Sub-arcsecond  |
+| JPL             | `seFlgJplEph`  | JPL ephemeris files | Highest        |
 
 Moshier works out of the box with no data files but is limited to
 ~1 arcsecond accuracy.
@@ -187,7 +187,7 @@ final resolved = await Isolate.resolvePackageUri(pkgUri);
 final ephePath = resolved!.resolve('../ephe').toFilePath();
 
 swe.setEphePath(ephePath);
-final sun = swe.calcUt(jd, seSun, seflgSwieph | seflgSpeed);
+final sun = swe.calcUt(jd, seSun, seFlgSwiEph | seFlgSpeed);
 ```
 
 This resolves to the `ephe/` directory in the pub cache (e.g.
@@ -214,15 +214,15 @@ Integer constants, not enums. Defined in `lib/src/constants.dart`.
 | Prefix    | Purpose            | Example              |
 |-----------|--------------------|----------------------|
 | `se`      | Body IDs           | `seSun`, `seMoon`    |
-| `seflg`   | Calculation flags  | `seflgSpeed`         |
+| `seFlg`   | Calculation flags  | `seFlgSpeed`         |
 | `hsys`    | House systems      | `hsysPlacidus`       |
 | `seSidm`  | Ayanamsa modes     | `seSidmLahiri`       |
 | `seCalc`  | Rise/set flags     | `seCalcRise`         |
 | `seEcl`   | Eclipse types      | `seEclTotal`         |
-| `seNodbit` | Node/apsides flags | `seNodbitMean`       |
+| `seNodBit` | Node/apsides flags | `seNodBitMean`       |
 | `seBit`   | Rise/transit flags | `seBitDiscCenter`    |
-| `seHelflag` | Heliacal flags   | `seHelflagLongSearch` |
-| `seSidbit` | Sidereal mode bits | `seSidbitEclT0`     |
+| `seHelFlag` | Heliacal flags   | `seHelFlagLongSearch` |
+| `seSidBit` | Sidereal mode bits | `seSidBitEclT0`     |
 
 ## Isolate safety
 

@@ -1,0 +1,3 @@
+tags:
+  stress:
+    skip: "Stress tests are slow. Run explicitly with: dart test -t stress"

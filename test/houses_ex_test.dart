@@ -21,8 +21,8 @@ void main() {
   test('calc — Sun position at J2000 ET close to calcUt result', () {
     // ET and UT differ by ~63 seconds at J2000, so positions should be close
     // but not identical.
-    final utResult = swe.calcUt(jdUt, seSun, seflgSwieph | seflgSpeed);
-    final etResult = swe.calc(jdUt, seSun, seflgSwieph | seflgSpeed);
+    final utResult = swe.calcUt(jdUt, seSun, seFlgSwiEph | seFlgSpeed);
+    final etResult = swe.calc(jdUt, seSun, seFlgSwiEph | seFlgSpeed);
     // Longitude should be within ~1 arcminute (Sun moves ~1 degree/day,
     // 63 seconds ~ 0.001 degree)
     expect((etResult.longitude - utResult.longitude).abs(), lessThan(0.02));
@@ -91,7 +91,7 @@ void main() {
 
   test('housePos — Sun is in a valid house', () {
     final h = swe.houses(jdUt, geolat, geolon, hsysPlacidus);
-    final sun = swe.calcUt(jdUt, seSun, seflgSwieph);
+    final sun = swe.calcUt(jdUt, seSun, seFlgSwiEph);
     const seEclNut = -1;
     final eclResult = swe.calcUt(jdUt, seEclNut, 0);
     final eps = eclResult.longitude;
@@ -107,7 +107,7 @@ void main() {
     final sector = swe.gauquelinSector(
       jdUt,
       seSun,
-      seflgSwieph,
+      seFlgSwiEph,
       0, // method: sector from rise/set
       geolon: geolon,
       geolat: geolat,

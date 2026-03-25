@@ -17,7 +17,7 @@ void main() {
       // J2000.0 = 2000-01-01 12:00 UT — Sun near winter solstice
       final jd = 2451545.0;
       // Get Sun position first
-      final sun = swe.calcUt(jd, seSun, seflgMoseph);
+      final sun = swe.calcUt(jd, seSun, seFlgMosEph);
 
       final result = swe.azAlt(jd, seEcl2hor,
           geolon: 0.0, geolat: 51.48,
@@ -42,7 +42,7 @@ void main() {
     test('roundtrip: azAlt then azAltRev recovers approximate equatorial coords', () {
       final jd = 2451545.0;
       // Get Sun equatorial position
-      final sun = swe.calcUt(jd, seSun, seflgMoseph | seflgEquatorial);
+      final sun = swe.calcUt(jd, seSun, seFlgMosEph | seFlgEquatorial);
 
       // Convert equatorial to horizontal
       final hor = swe.azAlt(jd, seEqu2hor,
