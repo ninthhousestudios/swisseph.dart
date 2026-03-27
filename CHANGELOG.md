@@ -1,3 +1,25 @@
+## 0.4.0
+
+Cross-platform FFI architecture for native + web support.
+
+### New
+- `SwissEph.load()` — async factory constructor, works on both native and web
+- WASM build infrastructure (`wasm/`) — Emscripten Docker build for web targets
+- Pre-built `assets/swisseph.{js,wasm}` — 88 exported functions, 512 KB
+
+### Changed
+- All FFI types routed through conditional import barrel (`ffi_types.dart`)
+- Library loading extracted to conditional barrel (`ffi_loader.dart`)
+- `swiss_eph.dart` no longer imports `dart:io` — fully platform-agnostic
+- `Char` → `Uint8` throughout all 88 bindings (web compatibility)
+- All methods migrated from `calloc`/`free`/`try`/`finally` to Arena-scoped `using()`
+- Custom UTF-8 string extensions (`utf8_compat.dart`) replacing `package:ffi` Utf8
+- Added `wasm_ffi` dependency for web platform support
+
+### Migration
+- `SwissEph(path)` and `SwissEph.find()` still work on native (no changes needed)
+- For cross-platform code, use `final swe = await SwissEph.load();`
+
 ## 0.3.0
 
 **Breaking:** All constants renamed to consistent camelCase.

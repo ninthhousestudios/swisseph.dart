@@ -1,17 +1,22 @@
 /// FFI types for web platforms (wasm_ffi).
 ///
-/// This file is only loaded on web targets via conditional import in
-/// `ffi_types.dart`. It will be fleshed out with wasm_ffi re-exports
-/// when web support is implemented (Issue 3).
-///
-/// For now, it throws [UnsupportedError] to catch accidental web use
-/// before the WASM build is ready.
-// ignore_for_file: unused_element
+/// Re-exports wasm_ffi types and provides a [using] helper matching
+/// package:ffi's API.
+export 'package:wasm_ffi/ffi.dart';
+export 'package:wasm_ffi/ffi_utils.dart' show Arena, calloc;
 
-/// Stub — web FFI support is not yet implemented.
+import 'package:wasm_ffi/ffi.dart' show Allocator;
+import 'package:wasm_ffi/ffi_utils.dart' show Arena, calloc;
+
+/// Run [computation] with an [Arena] allocator that frees everything on return.
 ///
-/// The conditional import barrel (`ffi_types.dart`) routes here on web.
-/// Once wasm_ffi integration lands, this file will re-export
-/// `package:wasm_ffi/wasm_ffi.dart` and provide a `using` helper.
-Never _unsupported() =>
-    throw UnsupportedError('Web FFI not yet implemented — see Issue 3');
+/// Mirrors `package:ffi`'s `using` function.
+R using<R>(R Function(Arena) computation,
+    [Allocator wrappedAllocator = calloc]) {
+  final arena = Arena(wrappedAllocator);
+  try {
+    return computation(arena);
+  } finally {
+    arena.releaseAll();
+  }
+}

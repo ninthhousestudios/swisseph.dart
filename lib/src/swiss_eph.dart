@@ -37,15 +37,41 @@ class SwissEph {
   /// [libraryPath] is the path to the compiled shared library (.so/.dylib/.dll).
   /// For isolate safety, each isolate should use a unique .so copy — see
   /// `test/isolate_test.dart`.
+  ///
+  /// **Native only.** On web, use [SwissEph.load] instead.
   SwissEph(String libraryPath) {
     _lib = loader.loadSwissEph(libraryPath);
     _bind = SweBindings(_lib);
+  }
+
+  /// Private constructor from an already-opened library.
+  SwissEph._fromLibrary(ffi.DynamicLibrary lib) {
+    _lib = lib;
+    _bind = SweBindings(lib);
+  }
+
+  /// Load the Swiss Ephemeris library asynchronously.
+  ///
+  /// Works on both native and web:
+  /// - **Native:** finds and loads the shared library from build hook output.
+  /// - **Web:** loads the WASM module (requires swisseph.js to be loaded).
+  ///
+  /// This is the recommended constructor for cross-platform code.
+  ///
+  /// ```dart
+  /// final swe = await SwissEph.load();
+  /// ```
+  static Future<SwissEph> load() async {
+    final lib = await loader.loadSwissEphAsync();
+    return SwissEph._fromLibrary(lib);
   }
 
   /// Search for the built library in common locations and load it.
   ///
   /// Looks in: .dart_tool/ (build hook output).
   /// Throws [StateError] if not found.
+  ///
+  /// **Native only.** On web, use [SwissEph.load] instead.
   factory SwissEph.find() {
     final path = loader.findLibrary();
     return SwissEph(path);
