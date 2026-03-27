@@ -35,14 +35,16 @@ with no code generation, no Flutter dependency, and full isolate safety.
 
 ## Platform support
 
-| Platform | Status                |
-|----------|-----------------------|
-| Linux    | Supported (gcc/clang) |
-| macOS    | Supported (clang)     |
-| Windows  | Supported (MSVC)      |
-| Android  | Supported (NDK)       |
+| Platform | Status                          |
+|----------|---------------------------------|
+| Linux    | Supported (gcc/clang)           |
+| macOS    | Supported (clang)               |
+| Windows  | Supported (MSVC)                |
+| Android  | Supported (NDK)                 |
+| Web      | Supported (WASM via Emscripten) |
 
-Requires Dart SDK 3.11+ and a C compiler.
+Native platforms require Dart SDK 3.11+ and a C compiler.
+Web requires the pre-built `assets/swisseph.{js,wasm}` served from your app.
 
 ## Install
 
@@ -54,7 +56,7 @@ Or add it to your `pubspec.yaml` directly:
 
 ```yaml
 dependencies:
-  swisseph: ^0.2.0
+  swisseph: ^0.4.0
 ```
 
 Alternatively, install from the Git repository:
@@ -71,6 +73,27 @@ Then run `dart pub get`, which triggers the native build hook to compile
 the C source.
 
 ## Quick start
+
+### Cross-platform (recommended)
+
+```dart
+import 'package:swisseph/swisseph.dart';
+
+void main() async {
+  final swe = await SwissEph.load();
+
+  final jd = swe.julday(2000, 1, 1, 12.0);
+  final sun = swe.calcUt(jd, seSun, seFlgMosEph | seFlgSpeed);
+  print('Sun: ${sun.longitude}°');
+
+  swe.close();
+}
+```
+
+`SwissEph.load()` works on both native and web. On native it finds the
+build hook output automatically; on web it loads the WASM module.
+
+### Native only
 
 ```dart
 import 'package:swisseph/swisseph.dart';
@@ -122,6 +145,18 @@ void main() {
 See [`example/example.dart`](example/example.dart) for a fuller example
 with formatted output.
 
+### Web setup
+
+Serve the pre-built WASM assets from your web app:
+
+1. Copy `assets/swisseph.js` and `assets/swisseph.wasm` to your web
+   app's asset directory
+2. Load the `swisseph.js` script in your HTML
+3. Use `SwissEph.load()` in your Dart code
+
+The WASM module exports all 88 Swiss Ephemeris functions (~512 KB).
+Web uses Moshier ephemeris only (no filesystem access for .se1 files).
+
 ## API reference
 
 | Category    | Methods                                                                                    |
@@ -143,7 +178,7 @@ with formatted output.
 | Names       | `getPlanetName`, `houseName`                                                               |
 | Utilities   | `degnorm`, `radNorm`, `degMidp`, `radMidp`, `difDegn`, `difDeg2n`, `splitDeg`              |
 
-All native memory uses `calloc` + `try/finally free`. Errors throw
+All native memory uses Arena-scoped `using()` allocation. Errors throw
 `SweException`.
 
 ## Ephemeris modes
@@ -253,6 +288,9 @@ at scale.
 - **No Flutter plugin** — this is a pure Dart package using native asset
   build hooks. Works with Dart CLI and can be used from Flutter, but is
   not a Flutter plugin.
+- **Web: Moshier only** — the WASM build has no filesystem, so Swiss
+  Ephemeris and JPL data files cannot be loaded. All web calculations
+  use Moshier mode (~1 arcsecond accuracy).
 - **Limited asteroid coverage** — main asteroids (Ceres, Pallas, Juno,
   Vesta, Chiron, Pholus, Hygiea) are bundled. Thousands more numbered
   asteroids are available from

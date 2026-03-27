@@ -15,11 +15,17 @@ csrc/                      # vendored Swiss Ephemeris C source (Astrodienst AG)
 ephe/                      # bundled .se1 ephemeris data files (~5400 BC – 5400 AD)
 lib/swisseph.dart          # barrel export
 lib/src/swiss_eph.dart     # SwissEph class — ~88 public methods
-lib/src/bindings.dart      # SweBindings — 75 raw dart:ffi lookups (package-private)
+lib/src/bindings.dart      # SweBindings — 75 raw FFI lookups (package-private)
 lib/src/constants.dart     # ~250 integer constants from swephexp.h
 lib/src/types.dart         # 30+ result types (all immutable, const constructors)
+lib/src/ffi_types.dart     # conditional import barrel (types) → native or web
+lib/src/ffi_loader.dart    # conditional import barrel (loader) → native or web
+lib/src/utf8_compat.dart   # platform-agnostic UTF-8 string extensions
 hook/build.dart            # native asset build hook (CBuilder)
-doc/architecture-0.2.md    # detailed architecture document
+wasm/                      # WASM build infrastructure (Emscripten Docker)
+assets/                    # pre-built swisseph.{js,wasm} for web
+doc/architecture-0.4.md    # detailed architecture document (current)
+doc/architecture-0.2.md    # previous architecture document
 ```
 
 ## API surface
@@ -40,7 +46,9 @@ doc/architecture-0.2.md    # detailed architecture document
 - **Names** (2): `getPlanetName`, `houseName`
 - **Utilities** (7): `degnorm`, `radNorm`, `degMidp`, `radMidp`, `difDegn`, `difDeg2n`, `splitDeg`
 
-All native memory uses `calloc` + `try/finally free`. Errors throw `SweException`.
+All native memory uses Arena-scoped `using()`. Errors throw `SweException`.
+
+Cross-platform: use `SwissEph.load()` (async). Native-only: `SwissEph.find()` or `SwissEph(path)` still work.
 
 ## Error patterns
 
