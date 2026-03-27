@@ -1,3 +1,7 @@
+## 0.4.1
+
+- Rebuild WASM assets with correct file ownership for pub.dev publishing.
+
 ## 0.4.0
 
 Cross-platform FFI architecture for native + web support.
