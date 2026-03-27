@@ -1,4 +1,4 @@
-import 'dart:ffi' as ffi;
+import 'ffi_types.dart' as ffi;
 
 /// Raw dart:ffi bindings to Swiss Ephemeris C functions.
 ///
@@ -25,9 +25,9 @@ class SweBindings {
 
   late final swe_utc_to_jd = _lib.lookupFunction<
       ffi.Int32 Function(ffi.Int32, ffi.Int32, ffi.Int32, ffi.Int32, ffi.Int32,
-          ffi.Double, ffi.Int32, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>),
+          ffi.Double, ffi.Int32, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>),
       int Function(int, int, int, int, int, double, int,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>)>('swe_utc_to_jd');
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>)>('swe_utc_to_jd');
 
   late final swe_jdut1_to_utc = _lib.lookupFunction<
       ffi.Void Function(
@@ -62,7 +62,7 @@ class SweBindings {
 
   late final swe_date_conversion = _lib.lookupFunction<
       ffi.Int32 Function(
-          ffi.Int32, ffi.Int32, ffi.Int32, ffi.Double, ffi.Char,
+          ffi.Int32, ffi.Int32, ffi.Int32, ffi.Double, ffi.Uint8,
           ffi.Pointer<ffi.Double>),
       int Function(
           int, int, int, double, int,
@@ -75,8 +75,8 @@ class SweBindings {
   // --- Configuration ---
 
   late final swe_set_ephe_path = _lib.lookupFunction<
-      ffi.Void Function(ffi.Pointer<ffi.Char>),
-      void Function(ffi.Pointer<ffi.Char>)>('swe_set_ephe_path');
+      ffi.Void Function(ffi.Pointer<ffi.Uint8>),
+      void Function(ffi.Pointer<ffi.Uint8>)>('swe_set_ephe_path');
 
   late final swe_set_sid_mode = _lib.lookupFunction<
       ffi.Void Function(ffi.Int32, ffi.Double, ffi.Double),
@@ -90,22 +90,22 @@ class SweBindings {
       .lookupFunction<ffi.Void Function(), void Function()>('swe_close');
 
   late final swe_version = _lib.lookupFunction<
-      ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>),
-      ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>('swe_version');
+      ffi.Pointer<ffi.Uint8> Function(ffi.Pointer<ffi.Uint8>),
+      ffi.Pointer<ffi.Uint8> Function(ffi.Pointer<ffi.Uint8>)>('swe_version');
 
   late final swe_set_jpl_file = _lib.lookupFunction<
-      ffi.Void Function(ffi.Pointer<ffi.Char>),
-      void Function(ffi.Pointer<ffi.Char>)>('swe_set_jpl_file');
+      ffi.Void Function(ffi.Pointer<ffi.Uint8>),
+      void Function(ffi.Pointer<ffi.Uint8>)>('swe_set_jpl_file');
 
   late final swe_get_library_path = _lib.lookupFunction<
-      ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>),
-      ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>('swe_get_library_path');
+      ffi.Pointer<ffi.Uint8> Function(ffi.Pointer<ffi.Uint8>),
+      ffi.Pointer<ffi.Uint8> Function(ffi.Pointer<ffi.Uint8>)>('swe_get_library_path');
 
   late final swe_get_current_file_data = _lib.lookupFunction<
-      ffi.Pointer<ffi.Char> Function(
+      ffi.Pointer<ffi.Uint8> Function(
           ffi.Int32, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
           ffi.Pointer<ffi.Int32>),
-      ffi.Pointer<ffi.Char> Function(
+      ffi.Pointer<ffi.Uint8> Function(
           int, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
           ffi.Pointer<ffi.Int32>)>('swe_get_current_file_data');
 
@@ -121,9 +121,9 @@ class SweBindings {
 
   late final swe_calc_ut = _lib.lookupFunction<
       ffi.Int32 Function(ffi.Double, ffi.Int32, ffi.Int32,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>),
       int Function(double, int, int, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>)>('swe_calc_ut');
+          ffi.Pointer<ffi.Uint8>)>('swe_calc_ut');
 
   late final swe_houses = _lib.lookupFunction<
       ffi.Int32 Function(ffi.Double, ffi.Double, ffi.Double, ffi.Int32,
@@ -133,9 +133,9 @@ class SweBindings {
 
   late final swe_calc = _lib.lookupFunction<
       ffi.Int32 Function(ffi.Double, ffi.Int32, ffi.Int32,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>),
       int Function(double, int, int, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>)>('swe_calc');
+          ffi.Pointer<ffi.Uint8>)>('swe_calc');
 
   late final swe_houses_ex = _lib.lookupFunction<
       ffi.Int32 Function(ffi.Double, ffi.Int32, ffi.Double, ffi.Double,
@@ -148,12 +148,12 @@ class SweBindings {
           ffi.Double, ffi.Int32, ffi.Double, ffi.Double, ffi.Int32,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Uint8>),
       int Function(
           double, int, double, double, int,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>)>('swe_houses_ex2');
+          ffi.Pointer<ffi.Uint8>)>('swe_houses_ex2');
 
   late final swe_houses_armc = _lib.lookupFunction<
       ffi.Int32 Function(ffi.Double, ffi.Double, ffi.Double, ffi.Int32,
@@ -166,28 +166,28 @@ class SweBindings {
           ffi.Double, ffi.Double, ffi.Double, ffi.Int32,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Uint8>),
       int Function(
           double, double, double, int,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>)>('swe_houses_armc_ex2');
+          ffi.Pointer<ffi.Uint8>)>('swe_houses_armc_ex2');
 
   late final swe_house_pos = _lib.lookupFunction<
       ffi.Double Function(ffi.Double, ffi.Double, ffi.Double, ffi.Int32,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>),
       double Function(double, double, double, int, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>)>('swe_house_pos');
+          ffi.Pointer<ffi.Uint8>)>('swe_house_pos');
 
   late final swe_gauquelin_sector = _lib.lookupFunction<
       ffi.Int32 Function(
-          ffi.Double, ffi.Int32, ffi.Pointer<ffi.Char>, ffi.Int32, ffi.Int32,
+          ffi.Double, ffi.Int32, ffi.Pointer<ffi.Uint8>, ffi.Int32, ffi.Int32,
           ffi.Pointer<ffi.Double>, ffi.Double, ffi.Double,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>),
       int Function(
-          double, int, ffi.Pointer<ffi.Char>, int, int,
+          double, int, ffi.Pointer<ffi.Uint8>, int, int,
           ffi.Pointer<ffi.Double>, double, double,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>)>('swe_gauquelin_sector');
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>)>('swe_gauquelin_sector');
 
   // --- Ayanamsa ---
 
@@ -201,30 +201,30 @@ class SweBindings {
 
   late final swe_get_ayanamsa_ex_ut = _lib.lookupFunction<
       ffi.Int32 Function(ffi.Double, ffi.Int32, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Uint8>),
       int Function(double, int, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>)>('swe_get_ayanamsa_ex_ut');
+          ffi.Pointer<ffi.Uint8>)>('swe_get_ayanamsa_ex_ut');
 
   late final swe_get_ayanamsa_ex = _lib.lookupFunction<
       ffi.Int32 Function(ffi.Double, ffi.Int32, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Uint8>),
       int Function(double, int, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>)>('swe_get_ayanamsa_ex');
+          ffi.Pointer<ffi.Uint8>)>('swe_get_ayanamsa_ex');
 
   late final swe_get_ayanamsa_name = _lib.lookupFunction<
-      ffi.Pointer<ffi.Char> Function(ffi.Int32),
-      ffi.Pointer<ffi.Char> Function(int)>('swe_get_ayanamsa_name');
+      ffi.Pointer<ffi.Uint8> Function(ffi.Int32),
+      ffi.Pointer<ffi.Uint8> Function(int)>('swe_get_ayanamsa_name');
 
   // --- Names ---
 
   late final swe_get_planet_name = _lib.lookupFunction<
-      ffi.Pointer<ffi.Char> Function(ffi.Int32, ffi.Pointer<ffi.Char>),
-      ffi.Pointer<ffi.Char> Function(
-          int, ffi.Pointer<ffi.Char>)>('swe_get_planet_name');
+      ffi.Pointer<ffi.Uint8> Function(ffi.Int32, ffi.Pointer<ffi.Uint8>),
+      ffi.Pointer<ffi.Uint8> Function(
+          int, ffi.Pointer<ffi.Uint8>)>('swe_get_planet_name');
 
   late final swe_house_name = _lib.lookupFunction<
-      ffi.Pointer<ffi.Char> Function(ffi.Int32),
-      ffi.Pointer<ffi.Char> Function(int)>('swe_house_name');
+      ffi.Pointer<ffi.Uint8> Function(ffi.Int32),
+      ffi.Pointer<ffi.Uint8> Function(int)>('swe_house_name');
 
   // --- Rise/set ---
 
@@ -232,168 +232,168 @@ class SweBindings {
       ffi.Int32 Function(
           ffi.Double,
           ffi.Int32,
-          ffi.Pointer<ffi.Char>,
+          ffi.Pointer<ffi.Uint8>,
           ffi.Int32,
           ffi.Int32,
           ffi.Pointer<ffi.Double>,
           ffi.Double,
           ffi.Double,
           ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Uint8>),
       int Function(
           double,
           int,
-          ffi.Pointer<ffi.Char>,
+          ffi.Pointer<ffi.Uint8>,
           int,
           int,
           ffi.Pointer<ffi.Double>,
           double,
           double,
           ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>)>('swe_rise_trans');
+          ffi.Pointer<ffi.Uint8>)>('swe_rise_trans');
 
   // --- Fixed stars ---
 
   late final swe_fixstar2_ut = _lib.lookupFunction<
-      ffi.Int32 Function(ffi.Pointer<ffi.Char>, ffi.Double, ffi.Int32,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>),
-      int Function(ffi.Pointer<ffi.Char>, double, int,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>)>('swe_fixstar2_ut');
+      ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Double, ffi.Int32,
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>),
+      int Function(ffi.Pointer<ffi.Uint8>, double, int,
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>)>('swe_fixstar2_ut');
 
   late final swe_fixstar2 = _lib.lookupFunction<
-      ffi.Int32 Function(ffi.Pointer<ffi.Char>, ffi.Double, ffi.Int32,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>),
-      int Function(ffi.Pointer<ffi.Char>, double, int,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>)>('swe_fixstar2');
+      ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Double, ffi.Int32,
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>),
+      int Function(ffi.Pointer<ffi.Uint8>, double, int,
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>)>('swe_fixstar2');
 
   late final swe_fixstar2_mag = _lib.lookupFunction<
-      ffi.Int32 Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>),
-      int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>)>('swe_fixstar2_mag');
+      ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Double>,
+          ffi.Pointer<ffi.Uint8>),
+      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Double>,
+          ffi.Pointer<ffi.Uint8>)>('swe_fixstar2_mag');
 
   // --- Crossing functions ---
 
   late final swe_solcross_ut = _lib.lookupFunction<
       ffi.Double Function(ffi.Double, ffi.Double, ffi.Int32,
-          ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Uint8>),
       double Function(double, double, int,
-          ffi.Pointer<ffi.Char>)>('swe_solcross_ut');
+          ffi.Pointer<ffi.Uint8>)>('swe_solcross_ut');
 
   late final swe_solcross = _lib.lookupFunction<
       ffi.Double Function(ffi.Double, ffi.Double, ffi.Int32,
-          ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Uint8>),
       double Function(double, double, int,
-          ffi.Pointer<ffi.Char>)>('swe_solcross');
+          ffi.Pointer<ffi.Uint8>)>('swe_solcross');
 
   late final swe_mooncross_ut = _lib.lookupFunction<
       ffi.Double Function(ffi.Double, ffi.Double, ffi.Int32,
-          ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Uint8>),
       double Function(double, double, int,
-          ffi.Pointer<ffi.Char>)>('swe_mooncross_ut');
+          ffi.Pointer<ffi.Uint8>)>('swe_mooncross_ut');
 
   late final swe_mooncross = _lib.lookupFunction<
       ffi.Double Function(ffi.Double, ffi.Double, ffi.Int32,
-          ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Uint8>),
       double Function(double, double, int,
-          ffi.Pointer<ffi.Char>)>('swe_mooncross');
+          ffi.Pointer<ffi.Uint8>)>('swe_mooncross');
 
   late final swe_mooncross_node_ut = _lib.lookupFunction<
       ffi.Double Function(ffi.Double, ffi.Int32, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>),
       double Function(double, int, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>)>('swe_mooncross_node_ut');
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>)>('swe_mooncross_node_ut');
 
   late final swe_mooncross_node = _lib.lookupFunction<
       ffi.Double Function(ffi.Double, ffi.Int32, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>),
       double Function(double, int, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>)>('swe_mooncross_node');
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>)>('swe_mooncross_node');
 
   late final swe_helio_cross_ut = _lib.lookupFunction<
       ffi.Int32 Function(ffi.Int32, ffi.Double, ffi.Double, ffi.Int32,
-          ffi.Int32, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>),
+          ffi.Int32, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>),
       int Function(int, double, double, int,
-          int, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>)>('swe_helio_cross_ut');
+          int, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>)>('swe_helio_cross_ut');
 
   late final swe_helio_cross = _lib.lookupFunction<
       ffi.Int32 Function(ffi.Int32, ffi.Double, ffi.Double, ffi.Int32,
-          ffi.Int32, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>),
+          ffi.Int32, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>),
       int Function(int, double, double, int,
-          int, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>)>('swe_helio_cross');
+          int, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>)>('swe_helio_cross');
 
   // --- Eclipses ---
 
   late final swe_sol_eclipse_when_loc = _lib.lookupFunction<
       ffi.Int32 Function(ffi.Double, ffi.Int32, ffi.Pointer<ffi.Double>,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>, ffi.Int32,
-          ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Uint8>),
       int Function(double, int, ffi.Pointer<ffi.Double>,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>, int,
-          ffi.Pointer<ffi.Char>)>('swe_sol_eclipse_when_loc');
+          ffi.Pointer<ffi.Uint8>)>('swe_sol_eclipse_when_loc');
 
   late final swe_sol_eclipse_when_glob = _lib.lookupFunction<
       ffi.Int32 Function(ffi.Double, ffi.Int32, ffi.Int32,
-          ffi.Pointer<ffi.Double>, ffi.Int32, ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Double>, ffi.Int32, ffi.Pointer<ffi.Uint8>),
       int Function(double, int, int, ffi.Pointer<ffi.Double>, int,
-          ffi.Pointer<ffi.Char>)>('swe_sol_eclipse_when_glob');
+          ffi.Pointer<ffi.Uint8>)>('swe_sol_eclipse_when_glob');
 
   late final swe_sol_eclipse_how = _lib.lookupFunction<
       ffi.Int32 Function(ffi.Double, ffi.Int32, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>),
       int Function(double, int, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>)>('swe_sol_eclipse_how');
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>)>('swe_sol_eclipse_how');
 
   late final swe_sol_eclipse_where = _lib.lookupFunction<
       ffi.Int32 Function(ffi.Double, ffi.Int32, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>),
       int Function(double, int, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>)>('swe_sol_eclipse_where');
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>)>('swe_sol_eclipse_where');
 
   late final swe_lun_eclipse_when = _lib.lookupFunction<
       ffi.Int32 Function(ffi.Double, ffi.Int32, ffi.Int32,
-          ffi.Pointer<ffi.Double>, ffi.Int32, ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Double>, ffi.Int32, ffi.Pointer<ffi.Uint8>),
       int Function(double, int, int, ffi.Pointer<ffi.Double>, int,
-          ffi.Pointer<ffi.Char>)>('swe_lun_eclipse_when');
+          ffi.Pointer<ffi.Uint8>)>('swe_lun_eclipse_when');
 
   late final swe_lun_eclipse_when_loc = _lib.lookupFunction<
       ffi.Int32 Function(ffi.Double, ffi.Int32, ffi.Pointer<ffi.Double>,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>, ffi.Int32,
-          ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Uint8>),
       int Function(double, int, ffi.Pointer<ffi.Double>,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>, int,
-          ffi.Pointer<ffi.Char>)>('swe_lun_eclipse_when_loc');
+          ffi.Pointer<ffi.Uint8>)>('swe_lun_eclipse_when_loc');
 
   late final swe_lun_eclipse_how = _lib.lookupFunction<
       ffi.Int32 Function(ffi.Double, ffi.Int32, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>),
       int Function(double, int, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>)>('swe_lun_eclipse_how');
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>)>('swe_lun_eclipse_how');
 
   late final swe_lun_occult_when_loc = _lib.lookupFunction<
-      ffi.Int32 Function(ffi.Double, ffi.Int32, ffi.Pointer<ffi.Char>,
+      ffi.Int32 Function(ffi.Double, ffi.Int32, ffi.Pointer<ffi.Uint8>,
           ffi.Int32, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Double>, ffi.Int32, ffi.Pointer<ffi.Char>),
-      int Function(double, int, ffi.Pointer<ffi.Char>, int,
+          ffi.Pointer<ffi.Double>, ffi.Int32, ffi.Pointer<ffi.Uint8>),
+      int Function(double, int, ffi.Pointer<ffi.Uint8>, int,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
           ffi.Pointer<ffi.Double>, int,
-          ffi.Pointer<ffi.Char>)>('swe_lun_occult_when_loc');
+          ffi.Pointer<ffi.Uint8>)>('swe_lun_occult_when_loc');
 
   late final swe_lun_occult_when_glob = _lib.lookupFunction<
-      ffi.Int32 Function(ffi.Double, ffi.Int32, ffi.Pointer<ffi.Char>,
+      ffi.Int32 Function(ffi.Double, ffi.Int32, ffi.Pointer<ffi.Uint8>,
           ffi.Int32, ffi.Int32, ffi.Pointer<ffi.Double>, ffi.Int32,
-          ffi.Pointer<ffi.Char>),
-      int Function(double, int, ffi.Pointer<ffi.Char>, int, int,
+          ffi.Pointer<ffi.Uint8>),
+      int Function(double, int, ffi.Pointer<ffi.Uint8>, int, int,
           ffi.Pointer<ffi.Double>, int,
-          ffi.Pointer<ffi.Char>)>('swe_lun_occult_when_glob');
+          ffi.Pointer<ffi.Uint8>)>('swe_lun_occult_when_glob');
 
   late final swe_lun_occult_where = _lib.lookupFunction<
-      ffi.Int32 Function(ffi.Double, ffi.Int32, ffi.Pointer<ffi.Char>,
+      ffi.Int32 Function(ffi.Double, ffi.Int32, ffi.Pointer<ffi.Uint8>,
           ffi.Int32, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>),
-      int Function(double, int, ffi.Pointer<ffi.Char>, int,
+          ffi.Pointer<ffi.Uint8>),
+      int Function(double, int, ffi.Pointer<ffi.Uint8>, int,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>)>('swe_lun_occult_where');
+          ffi.Pointer<ffi.Uint8>)>('swe_lun_occult_where');
 
   // --- Utilities ---
 
@@ -436,12 +436,12 @@ class SweBindings {
       double Function(double)>('swe_deltat');
 
   late final swe_deltat_ex = _lib.lookupFunction<
-      ffi.Double Function(ffi.Double, ffi.Int32, ffi.Pointer<ffi.Char>),
-      double Function(double, int, ffi.Pointer<ffi.Char>)>('swe_deltat_ex');
+      ffi.Double Function(ffi.Double, ffi.Int32, ffi.Pointer<ffi.Uint8>),
+      double Function(double, int, ffi.Pointer<ffi.Uint8>)>('swe_deltat_ex');
 
   late final swe_time_equ = _lib.lookupFunction<
-      ffi.Int32 Function(ffi.Double, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>),
-      int Function(double, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>)>('swe_time_equ');
+      ffi.Int32 Function(ffi.Double, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>),
+      int Function(double, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>)>('swe_time_equ');
 
   late final swe_sidtime = _lib.lookupFunction<
       ffi.Double Function(ffi.Double),
@@ -452,12 +452,12 @@ class SweBindings {
       double Function(double, double, double)>('swe_sidtime0');
 
   late final swe_lmt_to_lat = _lib.lookupFunction<
-      ffi.Int32 Function(ffi.Double, ffi.Double, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>),
-      int Function(double, double, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>)>('swe_lmt_to_lat');
+      ffi.Int32 Function(ffi.Double, ffi.Double, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>),
+      int Function(double, double, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>)>('swe_lmt_to_lat');
 
   late final swe_lat_to_lmt = _lib.lookupFunction<
-      ffi.Int32 Function(ffi.Double, ffi.Double, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>),
-      int Function(double, double, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>)>('swe_lat_to_lmt');
+      ffi.Int32 Function(ffi.Double, ffi.Double, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>),
+      int Function(double, double, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>)>('swe_lat_to_lmt');
 
   late final swe_set_delta_t_userdef = _lib.lookupFunction<
       ffi.Void Function(ffi.Double),
@@ -507,95 +507,95 @@ class SweBindings {
       ffi.Int32 Function(ffi.Double, ffi.Int32, ffi.Int32, ffi.Int32,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Uint8>),
       int Function(double, int, int, int,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>)>('swe_nod_aps_ut');
+          ffi.Pointer<ffi.Uint8>)>('swe_nod_aps_ut');
 
   late final swe_nod_aps = _lib.lookupFunction<
       ffi.Int32 Function(ffi.Double, ffi.Int32, ffi.Int32, ffi.Int32,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Uint8>),
       int Function(double, int, int, int,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>)>('swe_nod_aps');
+          ffi.Pointer<ffi.Uint8>)>('swe_nod_aps');
 
   // --- Orbital elements ---
 
   late final swe_get_orbital_elements = _lib.lookupFunction<
       ffi.Int32 Function(ffi.Double, ffi.Int32, ffi.Int32,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>),
       int Function(double, int, int,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>)>('swe_get_orbital_elements');
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>)>('swe_get_orbital_elements');
 
   late final swe_orbit_max_min_true_distance = _lib.lookupFunction<
       ffi.Int32 Function(ffi.Double, ffi.Int32, ffi.Int32,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>),
       int Function(double, int, int,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>)>('swe_orbit_max_min_true_distance');
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>)>('swe_orbit_max_min_true_distance');
 
   // --- Phenomena ---
 
   late final swe_pheno_ut = _lib.lookupFunction<
       ffi.Int32 Function(ffi.Double, ffi.Int32, ffi.Int32,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>),
       int Function(double, int, int,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>)>('swe_pheno_ut');
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>)>('swe_pheno_ut');
 
   late final swe_pheno = _lib.lookupFunction<
       ffi.Int32 Function(ffi.Double, ffi.Int32, ffi.Int32,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>),
       int Function(double, int, int,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>)>('swe_pheno');
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>)>('swe_pheno');
 
   // --- Heliacal ---
 
   late final swe_heliacal_ut = _lib.lookupFunction<
       ffi.Int32 Function(ffi.Double, ffi.Pointer<ffi.Double>,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>, ffi.Int32, ffi.Int32,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Uint8>, ffi.Int32, ffi.Int32,
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>),
       int Function(double, ffi.Pointer<ffi.Double>,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>, int, int,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>)>('swe_heliacal_ut');
+          ffi.Pointer<ffi.Uint8>, int, int,
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>)>('swe_heliacal_ut');
 
   late final swe_heliacal_pheno_ut = _lib.lookupFunction<
       ffi.Int32 Function(ffi.Double, ffi.Pointer<ffi.Double>,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>, ffi.Int32, ffi.Int32,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Uint8>, ffi.Int32, ffi.Int32,
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>),
       int Function(double, ffi.Pointer<ffi.Double>,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>, int, int,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>)>('swe_heliacal_pheno_ut');
+          ffi.Pointer<ffi.Uint8>, int, int,
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>)>('swe_heliacal_pheno_ut');
 
   late final swe_vis_limit_mag = _lib.lookupFunction<
       ffi.Int32 Function(ffi.Double, ffi.Pointer<ffi.Double>,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>, ffi.Int32,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Uint8>, ffi.Int32,
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>),
       int Function(double, ffi.Pointer<ffi.Double>,
           ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>,
-          ffi.Pointer<ffi.Char>, int,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>)>('swe_vis_limit_mag');
+          ffi.Pointer<ffi.Uint8>, int,
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>)>('swe_vis_limit_mag');
 
   // --- Rise/set true horizon ---
 
   late final swe_rise_trans_true_hor = _lib.lookupFunction<
       ffi.Int32 Function(
-          ffi.Double, ffi.Int32, ffi.Pointer<ffi.Char>,
+          ffi.Double, ffi.Int32, ffi.Pointer<ffi.Uint8>,
           ffi.Int32, ffi.Int32, ffi.Pointer<ffi.Double>,
           ffi.Double, ffi.Double, ffi.Double,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>),
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>),
       int Function(
-          double, int, ffi.Pointer<ffi.Char>,
+          double, int, ffi.Pointer<ffi.Uint8>,
           int, int, ffi.Pointer<ffi.Double>,
           double, double, double,
-          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Char>)>('swe_rise_trans_true_hor');
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>)>('swe_rise_trans_true_hor');
 }
