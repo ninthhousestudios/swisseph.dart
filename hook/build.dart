@@ -33,7 +33,9 @@ void main(List<String> args) async {
       sources: sources,
       language: Language.c,
       optimizationLevel: OptimizationLevel.o2,
-      libraries: ['m'],
+      // Link libm on platforms that need it. Windows includes math functions
+      // in the C runtime (ucrt), so there is no separate m.lib.
+      libraries: Platform.isWindows ? <String>[] : ['m'],
     );
 
     await cBuilder.run(input: input, output: output, logger: logger);

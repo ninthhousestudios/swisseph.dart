@@ -1,6 +1,6 @@
 name: swisseph
 description: Isolate-safe Dart FFI bindings to the Swiss Ephemeris C library.
-version: 0.4.1
+version: 0.4.2
 repository: https://gitlab.com/ninthhouse/swisseph.dart
 license: AGPL-3.0-or-later
 

@@ -1,3 +1,9 @@
+## 0.4.2
+
+- Fix Windows build: skip `-lm` linker flag on Windows where math functions
+  are part of the C runtime (ucrt). The `m.lib` file does not exist on
+  Windows, causing `LNK1181` fatal link errors during native asset compilation.
+
 ## 0.4.1
 
 - Rebuild WASM assets with correct file ownership for pub.dev publishing.
