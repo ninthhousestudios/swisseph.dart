@@ -36,6 +36,12 @@ void main(List<String> args) async {
       // Link libm on platforms that need it. Windows includes math functions
       // in the C runtime (ucrt), so there is no separate m.lib.
       libraries: Platform.isWindows ? <String>[] : ['m'],
+      // On Windows, define MAKE_DLL so swephexp.h decorates exported functions
+      // with __declspec(dllexport). Without this, symbols aren't visible in the
+      // built DLL and DynamicLibrary.lookup() fails at runtime.
+      defines: Platform.isWindows
+          ? {'MAKE_DLL': null}
+          : <String, String?>{},
     );
 
     await cBuilder.run(input: input, output: output, logger: logger);

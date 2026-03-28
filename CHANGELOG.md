@@ -1,3 +1,10 @@
+## 0.4.3
+
+- Fix Windows symbol exports: define `MAKE_DLL` during compilation so that
+  `swephexp.h` decorates functions with `__declspec(dllexport)`. Without this,
+  the built DLL has no exported symbols and `DynamicLibrary.lookup()` fails
+  at runtime.
+
 ## 0.4.2
 
 - Fix Windows build: skip `-lm` linker flag on Windows where math functions
