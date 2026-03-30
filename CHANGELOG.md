@@ -1,3 +1,10 @@
+## 0.4.4
+
+- Add `calcPctr` — planetocentric position calculation (`swe_calc_pctr`).
+  Computes a body's position as seen from any other body (e.g. Jupiter-centric
+  ephemerides, or asteroid-to-asteroid observations). Takes ET; signature
+  matches `calc` with an additional `centerBody` parameter.
+
 ## 0.4.3
 
 - Fix Windows symbol exports: define `MAKE_DLL` during compilation so that
