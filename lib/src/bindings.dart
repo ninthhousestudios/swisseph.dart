@@ -137,6 +137,12 @@ class SweBindings {
       int Function(double, int, int, ffi.Pointer<ffi.Double>,
           ffi.Pointer<ffi.Uint8>)>('swe_calc');
 
+  late final swe_calc_pctr = _lib.lookupFunction<
+      ffi.Int32 Function(ffi.Double, ffi.Int32, ffi.Int32, ffi.Int32,
+          ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Uint8>),
+      int Function(double, int, int, int, ffi.Pointer<ffi.Double>,
+          ffi.Pointer<ffi.Uint8>)>('swe_calc_pctr');
+
   late final swe_houses_ex = _lib.lookupFunction<
       ffi.Int32 Function(ffi.Double, ffi.Int32, ffi.Double, ffi.Double,
           ffi.Int32, ffi.Pointer<ffi.Double>, ffi.Pointer<ffi.Double>),

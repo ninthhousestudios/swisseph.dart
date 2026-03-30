@@ -356,6 +356,30 @@ class SwissEph {
     });
   }
 
+  /// Calculate planetocentric positions — a body as seen from another body.
+  ///
+  /// [body] is the target, [centerBody] is the observer (e.g. [seJupiter]
+  /// to get Jupiter-centric positions). Takes Ephemeris Time (ET/TDB).
+  CalcResult calcPctr(double jdEt, int body, int centerBody, int flags) {
+    return using((Arena arena) {
+      final xx = arena<ffi.Double>(6);
+      final serr = arena<ffi.Uint8>(256);
+      final ret = _bind.swe_calc_pctr(jdEt, body, centerBody, flags, xx, serr);
+      if (ret < 0) {
+        throw SweException(serr.toDartString(), ret);
+      }
+      return CalcResult(
+        longitude: xx[0],
+        latitude: xx[1],
+        distance: xx[2],
+        longitudeSpeed: xx[3],
+        latitudeSpeed: xx[4],
+        distanceSpeed: xx[5],
+        returnFlag: ret,
+      );
+    });
+  }
+
   /// Calculate house cusps for a given time and location.
   HouseResult houses(double jdUt, double geolat, double geolon, int hsys) {
     return using((Arena arena) {
